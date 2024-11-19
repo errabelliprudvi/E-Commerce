@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors({
-  origin: 'http://localhost:4173' // Replace with your React app's URL
+  origin: 'http://localhost:5173' // Replace with your React app's URL
 }));
 
 
