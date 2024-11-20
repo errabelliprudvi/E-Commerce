@@ -105,3 +105,31 @@ exports.deleteProduct = async (req, res) => {
     res.status(500).json({ message: 'Error deleting product', error });
   }
 };
+
+
+// Controller function to add multiple products
+exports.addMultipleProducts = async (req, res) => {
+  try {
+    // Extract products array from request body
+    const products = req.body.products;
+
+    // Check if products array exists and is an array
+    if (!Array.isArray(products) || products.length === 0) {
+      return res.status(400).json({ message: 'Products array is required and must not be empty.' });
+    }
+
+    // Create multiple products using Mongoose's insertMany
+    const createdProducts = await Product.insertMany(products);
+
+    res.status(201).json({
+      message: 'Products added successfully.',
+      data: createdProducts,
+    });
+  } catch (error) {
+    console.error('Error adding multiple products:', error);
+    res.status(500).json({
+      message: 'An error occurred while adding products.',
+      error: error.message,
+    });
+  }
+};

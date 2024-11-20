@@ -20,4 +20,7 @@ router.put('/:productId', productController.updateProduct);
 // Delete a product
 router.delete('/:productId', productController.deleteProduct);
 
+// POST route to add multiple products
+router.post('/addMulti', productController.addMultipleProducts);
+
 module.exports = router;
