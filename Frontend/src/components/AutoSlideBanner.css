@@ -1,0 +1,62 @@
+/* CSS for the banner container */
+.banner-container {
+    width: 100%; /* Make the banner full width */
+    height: 40vh; /* Set the height for the banner */
+    overflow: hidden; /* Hide any overflow from sliding */
+    position: relative;
+    max-width: 100%; /* Ensure the container doesn't get too large */
+  }
+  
+  /* For screens smaller than 768px (typically mobile screens) */
+  @media (max-width: 768px) {
+    .banner-container {
+      height: 250px;  /* Adjust height for smaller screens */
+    }
+  }
+  
+  
+  /* CSS for the slide element that holds all images */
+  .banner-slide {
+    display: flex;
+    transition: transform 1s ease; /* Smooth transition when sliding */
+    width: 70%; /* Three slides, so 100% * 3 */
+  }
+  
+  /* CSS for individual images in the banner */
+  .banner-image {
+    width: 100%; /* Each image takes up 100% of the width of the container */
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+  }
+  
+  /* CSS for the indicators container */
+  .banner-indicators {
+    position: absolute;
+    bottom: 10px; /* Position indicators 10px from the bottom of the banner */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between each indicator */
+  }
+  
+  /* CSS for individual indicator */
+  .indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%; /* Circle shape */
+    background-color: rgba(5, 4, 4, 0.5); /* Transparent white by default */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  
+  /* Active indicator (current slide) */
+  .indicator.active {
+    background-color: rgb(20, 15, 15); /* Fully white when active */
+  }
+  
+  /* Hover effect for indicators */
+  .indicator:hover {
+    background-color: rgba(230, 10, 10, 0.8); /* Light up when hovered */
+  }
+  

@@ -1,0 +1,79 @@
+.mainCnt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.heading {
+    margin-bottom: 20px;
+    font-size: 2rem; /* Scales better */
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.listCnt {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    justify-content: center; /* Center the items */
+    gap: 20px; /* Space between items */
+}
+
+.imgCnt {
+    border-radius: 15px;
+    background-color: transparent;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    margin: 20px;
+    overflow: hidden;
+    position: relative; /* Needed for positioning the button */
+    width: 25vw;
+    height: 25vw;
+    max-width: 400px;
+    max-height: 400px;
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.imgCnt img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the container */
+}
+
+.btn {
+    position: absolute; /* Position button inside the image container */
+    bottom: 10px; /* Place near the bottom of the container */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Align center */
+    border-radius: 5px;
+    padding: 10px 20px; /* Adjust padding */
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background for contrast */
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    z-index: 10; /* Ensure it's above the image */
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.8); /* Change background on hover */
+    color: black;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .btn {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .btn {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}

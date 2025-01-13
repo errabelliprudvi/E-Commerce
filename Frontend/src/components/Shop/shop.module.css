@@ -1,0 +1,88 @@
+.mainCnt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    text-align: center;
+}
+
+.heading {
+    margin-bottom: 15px;
+    font-size: xx-large;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.listCnt {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: center;
+    gap: 20px; /* Space between items */
+    overflow: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+.listCnt::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Edge */
+}
+
+.imgCnt {
+    border-radius: 50%;
+    position: relative;
+    background-color: transparent;
+    margin: 10px;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.imgCnt:hover {
+    transform: scale(1.1); /* Slightly enlarge on hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow effect */
+}
+
+.img {
+    width: 100%; /* Scale image to fit container */
+    height: 100%;
+    object-fit: cover;
+}
+
+.catName {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.catCnt {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selectedCategory {
+    box-shadow: 0px 0px 8px 2px rgba(0, 123, 255, 0.5); /* Highlight selected category */
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .imgCnt {
+        width: 180px;
+        height: 180px; /* Larger for tablets */
+    }
+    .catName {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .imgCnt {
+        width: 200px;
+        height: 200px; /* Larger for desktops */
+    }
+    .catName {
+        font-size: 1.7rem;
+    }
+}

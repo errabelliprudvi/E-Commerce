@@ -1,0 +1,86 @@
+
+.mainCnt
+{
+    margin: 20px;
+    padding: 20px;
+    gap: 20px;
+    align-items: center;
+}
+
+.cardCnt
+{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+    overflow: hidden;
+
+}
+
+.imgCnt
+{
+    border-radius: 10px;
+    margin: 10px;
+    /* Full width or adjust as needed */
+    position: relative;
+    background-color:transparent; /* Example background */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+   
+    border-radius: 15px;
+    overflow: hidden;
+
+   
+    /* Set a consistent height */
+   /* Ensures the image is cropped to fit the container */
+   
+}
+.img {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+  }
+  .cardDetailCnt
+  {
+    align-items: center;
+   align-content: center;
+    gap:5px;
+  }
+  .hdrCnt
+  {
+    margin-bottom: 15px;
+    font-size: x-large;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .specsCnt
+  {
+  margin-bottom: 10px;
+  }
+
+  .cartDetailCnt
+  {
+  justify-content: flex-start;
+  margin: 20px;
+  gap:10px
+  }
+  .chart
+  {
+    display: flex;
+   margin-bottom: 10px;
+
+  }
+  .quantity
+  {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  .cart{
+    margin: 10px;
+    display: flex;
+    justify-content: space-around;
+    justify-content: center;
+    gap: 10px;
+  }

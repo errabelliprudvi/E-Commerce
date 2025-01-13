@@ -1,0 +1,40 @@
+
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 20px;
+    background-color:transparent;
+    padding: 10px;
+    margin: 10 px; /* Center the grid within the body */
+    padding: 16px; 
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+ .imgCnt
+{
+    border-radius: 10px;
+    margin: 10px;
+    /* Full width or adjust as needed */
+    position: relative;
+    background-color:transparent; /* Example background */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+   
+    border-radius: 15px;
+    overflow: hidden;
+
+   
+    height: 400px; /* Set a consistent height */
+   /* Ensures the image is cropped to fit the container */
+   
+}
+.img {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85%;
+    object-fit: cover;
+  }
