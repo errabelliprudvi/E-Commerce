@@ -1,17 +1,21 @@
 import { Button } from "@mui/material";
 import styles from './product.module.css'
-import cam from '../../assets/pex.jpg'
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useUser } from "../../UserProvider";
+import {getProductById,addToCart} from '../../api'
+ 
+
 
 export default function Product()
 {
+ 
    // const product= {id:'spr143',image:cam,title:"Android Phone",price:"$ 150",seller:'Grospr',info:"Best Android mobile phone in the market"}
     const{user,fetchNumberOfItemsInCart,setItemsInCart} =useUser()
     const { id } = useParams(); // Extract the product ID from the URL
     //const  userId = localStorage.getItem('userId')
-
+    const navigate = useNavigate();
     const [product, setProductDetails] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -23,13 +27,11 @@ export default function Product()
       // Replace with your API endpoint
       const fetchData = async () => {
         try {
-          const response = await fetch(`/api/products/${id}`); // API endpoint
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const result = await response.json();
+          const result =  getProductById(id); 
+          
+          console.log(result);
           setProductDetails(result);
-          console.log(result)
+
         } catch (error) {
           setError(error.message);
         } finally {
@@ -46,30 +48,24 @@ export default function Product()
 
     const handleAddToCart = async (item) => {
         console.log(item._id)
-        try {
-          const response = await fetch('/api/cart', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-              "userId": user,
-              "product": item._id,
-              "quantity": 1
-            }),
-          });
-    
-          if (!response.ok) {
-            throw new Error('Failed to add item to cart');
+        if(!user)
+        {
+          try {
+            const response = await addToCart({ 
+              userId: user,
+              product: item._id,
+              quantity: 1})
+            
+            setItemsInCart(response.cart.items.length || 0);
+          } catch (error) {
+            console.error('Error adding to cart:', error.message);
           }
-    
-          const updatedCart = await response.json();
-          console.log(updatedCart.cart.items); // Update local cart state with the response
-          setItemsInCart(updatedCart.cart.items.length||0)
-          //fetchNumberOfItemsInCart()
-        } catch (error) {
-          console.error('Error adding to cart:', error.message);
         }
+        else
+        {
+          navigate("/login");
+        }
+       
       };
     
     

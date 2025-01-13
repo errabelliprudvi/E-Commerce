@@ -5,6 +5,7 @@ import pex from '../../assets/pex.jpg'
 import cam from '../../assets/cam.jpg'
 import stu from '../../assets/stu.jpg'
 import styles from './shop.module.css'
+import {getCategories,getProductsByCategory} from '../../api'
 export default function Category({setProducts}){
 
   //const data = [{img:stu,name:'Mens'},{img:pex,name:'Women'},{img:cam,name:'Jeans'},{img:stu,name:'Children'}]
@@ -20,13 +21,9 @@ export default function Category({setProducts}){
     // Replace with your API endpoint
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/category'); // API endpoint
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const result = await response.json();
-        setData(result);
-        console.log(result)
+        const categories = await getCategories(); // API endpoint
+        setData(categories);
+        console.log(categories)
       } catch (error) {
         setError(error.message);
       } finally {
@@ -43,11 +40,7 @@ export default function Category({setProducts}){
     setSelectedCategory(categoryId); // Set the selected category
     // Fetch products for the selected category
     try {
-      const response = await fetch(`/api/products/category/${categoryId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch products');
-      }
-      const productsData = await response.json();
+      const productsData = await getProductsByCategory(categoryId);
       setProducts(productsData);
       console.log(productsData)
     } catch (error) {
@@ -71,8 +64,8 @@ export default function Category({setProducts}){
                 <div   key={item._id} className={styles.catCnt}>
                                 <div  
                                 className={`${styles.imgCnt} ${selectedCategory === item.name ? styles.selectedCategory : ''}`}
-                                onClick={() => handleCategoryClick(item.name)} >
-                                        <img className={styles.img}src={`/images/categories/${item.name}.jpg`}/>
+                                onClick={() => handleCategoryClick(item._id)} >
+                                        <img className={styles.img}src={`/images/categories/${item.image}`}/>
                                         
                                 </div>
                                 <div className={styles.catName}> {item.name}</div>

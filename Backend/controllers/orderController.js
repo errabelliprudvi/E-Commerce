@@ -30,6 +30,16 @@ exports.createOrder = async (req, res) => {
   }
 };
 
+// Get all orders Admin only
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find(); // Retrieve all products
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching products', error });
+  }
+};
+
 // Get all orders for a user
 exports.getUserOrders = async (req, res) => {
   try {

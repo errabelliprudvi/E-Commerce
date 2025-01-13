@@ -12,7 +12,7 @@ import ProfilePage from './Pages/ProfilePage.jsx';
 import LoginPage from './Pages/LoginPage.jsx';
 import SignUpPage from './Pages/SignUpPage.jsx';
 import AuthPage from './Pages/AuthPage.jsx';
-
+import AdminPage from './Pages/AdminPage.jsx'
 
 
 
@@ -49,7 +49,7 @@ function App() {
           <Route path="/login" element={<AuthPage setIsAuthenticated={setIsAuthenticated} setUserId={setUserId}/>}/>
           <Route path="/signup" element ={<SignUpPage/>} />
           <Route path="/"  element={<Home/>}/>
-              <Route path="/shop" element={<Shop/>} />
+          <Route path="/shop" element={<Shop/>} />
           <Route path="/product/:id"  element={<ProductPage/>}/>
               <Route path="/cart" element={<ProtectedRoute isAuthenticated={isAuthenticated}>
                                                                         <CartPage userId={userId}/>           
@@ -60,7 +60,10 @@ function App() {
               <Route path ="/user/profile" element={<ProtectedRoute isAuthenticated={isAuthenticated}>
                                                                          <ProfilePage userId={userId}/>              
                                                            </ProtectedRoute>}/>
-              <Route path="*" element={<NoPage/>} />
+              <Route path ="/bashboard" element={<ProtectedRoute isAuthenticated={isAuthenticated}>
+                                                                         <AdminPage/>              
+                                                           </ProtectedRoute>}/>
+              <Route path="*" element={<AdminPage/>} />
           
       </Routes>
     </BrowserRouter>

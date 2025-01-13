@@ -3,7 +3,7 @@ const {
   createOrder,
   getUserOrders,
   getOrderById,
-  updateOrderStatus
+  updateOrderStatus,getAllOrders
 } = require('../controllers/orderController');
 
 const router = express.Router();
@@ -19,5 +19,6 @@ router.get('/:orderId', getOrderById);
 
 // Update order status and payment status
 router.put('/:orderId', updateOrderStatus);
+router.get('/',getAllOrders);
 
 module.exports = router;

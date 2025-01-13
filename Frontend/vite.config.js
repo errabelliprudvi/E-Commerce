@@ -15,6 +15,10 @@ export default defineConfig({
         target: 'http://localhost:3000', // Your Express backend
         changeOrigin: true,
       },
+      '/images': {
+        target: 'http://localhost:3000', // Your Express backend
+        changeOrigin: true,
+      },
     },
   },
 });

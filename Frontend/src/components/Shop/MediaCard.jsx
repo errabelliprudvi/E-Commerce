@@ -8,32 +8,22 @@ import InfoIcon from '@mui/icons-material/Info';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../UserProvider';
 import { Box } from '@mui/material';
+import {addToCart} from '../../api'
 
 export default function MediaCard({ item }) {
   const { _id, name, description, images, category } = item;
   const { user, setItemsInCart } = useUser();
   const navigate = useNavigate();
+  const cartOptions ={}
 
   const handleAddToCart = async (item) => {
     try {
-      const response = await fetch('api/cart', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user,
-          product: item._id,
-          quantity: 1,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add item to cart');
-      }
-
-      const updatedCart = await response.json();
-      setItemsInCart(updatedCart.cart.items.length || 0);
+      const response = await addToCart({ 
+        userId: user,
+        product: item._id,
+        quantity: 1})
+      
+      setItemsInCart(response.cart.items.length || 0);
     } catch (error) {
       console.error('Error adding to cart:', error.message);
     }
@@ -50,7 +40,7 @@ export default function MediaCard({ item }) {
         <CardMedia
           component="img"
           height="250"
-          image={`/images/${category}/${images[0]}`}
+          image={`/images/${category}/${name}/${images[0]}`}
           alt={name}
           sx={{ objectFit: 'cover' }}
         />

@@ -72,6 +72,9 @@ export default function Header({userId}) {
               <MenuItem component={Link} to="/contact" onClick={closeMenu}>
                 Contact Us
               </MenuItem>
+              <MenuItem component={Link} to="/adminDash" onClick={closeMenu}>
+                Admin
+              </MenuItem>
             </Menu>
           </>
         ) : (
@@ -87,6 +90,9 @@ export default function Header({userId}) {
             </Button>
             <Button component={Link} to="/contact" color="inherit" sx={{ fontSize: '1.1rem', textTransform: 'capitalize' }}>
               Contact Us
+            </Button>
+            <Button component={Link} to="/adminDash" color="inherit" sx={{ fontSize: '1.1rem', textTransform: 'capitalize' }}>
+              Admin
             </Button>
           </Box>
         )}
