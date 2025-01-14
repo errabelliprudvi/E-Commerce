@@ -85,7 +85,7 @@ exports.getOrderById = async (req, res) => {
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { orderStatus, paymentStatus } = req.body;
+    const { orderStatus} = req.body;
 
     // Validate orderId
     if (!mongoose.Types.ObjectId.isValid(orderId)) {
@@ -99,7 +99,7 @@ exports.updateOrderStatus = async (req, res) => {
 
     // Update order status and/or payment status
     if (orderStatus) order.orderStatus = orderStatus;
-    if (paymentStatus) order.paymentStatus = paymentStatus;
+    //if (paymentStatus) order.paymentStatus = paymentStatus;
 
     await order.save();
     res.status(200).json({ message: 'Order updated successfully', order });

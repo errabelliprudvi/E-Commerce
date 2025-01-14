@@ -22,7 +22,7 @@ const AdminDashboard = () => {
         return <ProductsPage />;
       case "Categories":
         return <CategoriesPage />;
-      case "Users":
+      case "Delete Products":
         return <DeleteProductPage />;
       default:
         return <div>Select a page from the menu</div>;
@@ -84,13 +84,13 @@ const AdminDashboard = () => {
             style={{
               padding: "10px",
               cursor: "pointer",
-              backgroundColor: selectedPage === "Users" ? "#34495E" : "transparent",
+              backgroundColor: selectedPage === "Delete Products" ? "#34495E" : "transparent",
               borderRadius: "5px",
               margin: "10px 0",
             }}
-            onClick={() => setSelectedPage("Users")}
+            onClick={() => setSelectedPage("Delete Products" )}
           >
-            Users
+            Delete Products
           </li>
         </ul>
       </div>

@@ -6,6 +6,7 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useUser } from '../../UserProvider';
+import RazorpayCheckout from '../Razorpay/RazorpayCheckOut';
 export default function Cart({userId})
 {
 
@@ -17,26 +18,35 @@ export default function Cart({userId})
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const[total,setTotal]  = useState(0);
-
-
+    const [checkOut,setcheckOut] = useState(false);
+    const [paymentStatus,setPaymentStatus] = useState(null);
     //const [selectedCategory, setSelectedCategory] = useState(null); // State for selected category
    // const [products, setProducts] = useState([]); // State for products of selected category
      
+
+//..............................................................//................................//................
+
+//...............................................................//..................................//..........
+
 
    const fetchData = async () => {
     try {
       const response = await fetch(`/api/cart/${userId}`); // API endpoint
       if (!response.ok) {
-        if(response.status==404)
-        {
-          throw new Error('You Cart is Empty...');
+        if (response.status == 404) {
+          throw new Error('Your Cart is Empty...');
         }
-        
       }
       const result = await response.json();
       setCartData(result.items);
-      setItemsInCart(result.items.length ||0)
-      console.log(result)
+      setItemsInCart(result.items.length || 0);
+
+      // Calculate the total price
+      const calculatedTotal = result.items.reduce((sum, item) => 
+        sum + item.product.price * item.quantity, 0);
+      setTotal(calculatedTotal);
+
+      console.log(result);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -44,33 +54,8 @@ export default function Cart({userId})
     }
   };
 
-
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`/api/cart/${userId}`); // API endpoint
-        if (!response.ok) {
-          if (response.status == 404) {
-            throw new Error('Your Cart is Empty...');
-          }
-        }
-        const result = await response.json();
-        setCartData(result.items);
-        setItemsInCart(result.items.length || 0);
-  
-        // Calculate the total price
-        const calculatedTotal = result.items.reduce((sum, item) => 
-          sum + item.product.price * item.quantity, 0);
-        setTotal(calculatedTotal);
-  
-        console.log(result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    
   
     fetchData();
   }, [userId]); // Ensure it runs when userId changes
@@ -189,9 +174,10 @@ export default function Cart({userId})
     if (loading) return <div>Loading...</div>;
     if (error) return <div><h3>{error}</h3> </div>;
     
-
-
-
+    if(checkOut) return <div>
+      <RazorpayCheckout setPaymentStatus={setPaymentStatus} total ={total}/>
+    </div>
+    
 
     //const items =[{id:"spr123",img:pex,name:"Iphone 16 pro",price:150 ,qnt:2},{id:"spr123",img:pex,name:"Iphone 16 pro",price:150 ,qnt:2},{id:"spr123",img:pex,name:"Iphone 16 pro",price:150 ,qnt:2}]
     return (
@@ -208,9 +194,9 @@ export default function Cart({userId})
               </div>
               <div className={styles.detailCnt}>
                 <h3>Name: {item.product.name}</h3>
-                <h3>Price: $ {item.product.price}</h3>
+                <h3>Price: ₹ {item.product.price}</h3>
                 <h3>Quantity: {item.quantity}</h3>
-                <h3>Total: $ {item.product.price * item.quantity}</h3>
+                <h3>Total: ₹ {item.product.price * item.quantity}</h3>
               </div>
               <div className={styles.rmCnt}>
                 <Button onClick={() => handleRemoveFromCart(item.product._id)}>
@@ -227,11 +213,13 @@ export default function Cart({userId})
             </h2>
           ) : (
             <>
-              <Button onClick={() => handleBuyNow(items)}>Check Out</Button>
-              <h2>Total: $ {total}</h2>
+              <Button onClick={() => setcheckOut(true)}>Check Out</Button>
+              <h2>Total: ₹ {total}</h2>
             </>
           )}
         </div>
       </div>
     );
     }
+
+    //handleBuyNow(items)

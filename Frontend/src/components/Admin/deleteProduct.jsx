@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, Box, FormControl, Select, MenuItem, InputLabel, Stack, Card, CardContent, CardActions } from '@mui/material';
-
+import {getCategories,getProductsByCategory,deleteProduct} from '../../api'
 const  DeleteProductPage = () => {
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState('');
@@ -9,8 +9,7 @@ const  DeleteProductPage = () => {
   // Fetch categories from backend
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/categories'); // Adjust backend URL if needed
-      const data = await response.json();
+      const data = await getCategories(); // Adjust backend URL if needed
       setCategories(data);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -21,8 +20,7 @@ const  DeleteProductPage = () => {
   const fetchProductsByCategory = async (categoryId) => {
     if (!categoryId) return;
     try {
-      const response = await fetch(`http://localhost:5000/products?category=${categoryId}`);
-      const data = await response.json();
+      const data = await getProductsByCategory(categoryId);
       setProducts(data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -40,16 +38,10 @@ const  DeleteProductPage = () => {
     const confirmDelete = window.confirm('Are you sure you want to delete this product?');
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/products/${productId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
+        const response = await deleteProduct(productId);
           alert('Product deleted successfully!');
           setProducts(products.filter(product => product._id !== productId));
-        } else {
-          alert('Error deleting product.');
-        }
+        
       } catch (error) {
         console.error('Error deleting product:', error);
       }

@@ -94,12 +94,11 @@ exports.deleteProduct = async (req, res) => {
   try {
     const { productId } = req.params;
 
-    const product = await Product.findById(productId); // Find the product to delete
-    if (!product) {
+    const product = await Product.findByIdAndDelete(productId); // Delete product directly
+     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    await product.remove();
     res.status(200).json({ message: 'Product deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting product', error });

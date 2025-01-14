@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
 import {getOrders,updateOrderStatus} from '../../api'
 
-// API URL
-const API_URL = "http://localhost:5000"; // Replace with your base API URL
 
 const  AdminOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+  const fetchOrders = async () => {
+    try {
+      const data = await getOrders();
+      console.log(data);
+      setOrders(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   // Fetch orders from the backend
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const data = await getOrders();
-        setOrders(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchOrders();
   }, []);
 

@@ -14,10 +14,12 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000', // Your Express backend
         changeOrigin: true,
+        secure: false, 
       },
-      '/images': {
+      '/image': {
         target: 'http://localhost:3000', // Your Express backend
         changeOrigin: true,
+        secure: false, 
       },
     },
   },

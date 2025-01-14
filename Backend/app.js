@@ -9,9 +9,12 @@ const categoryRoutes = require('./routes/categoryRoutes')
 const ratingRoutes = require('./routes/ratingRoutes');
 const authRoutes = require('./routes/authRoutes')
 const uploadRoutes = require('./routes/uploadRoutes')
+const paymentRoutes = require('./routes/paymentRoutes');
+
 const isAuthenticated = require('./middlewares/auth')
 const demoRoute = require('./routes/demoRoute')
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const session = require('./middlewares/Session')
 // Load environment variables
@@ -24,6 +27,7 @@ require('dotenv').config();
 // Serve static files from the 'dist' folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.json());
 // Add CORS middleware
 app.use(
   cors({
@@ -56,12 +60,13 @@ app.use('/api/category',categoryRoutes);
 app.use('/api/ratings', ratingRoutes);
 app.use('/user',authRoutes)
 app.use('/api/upload',uploadRoutes)
+app.use('/api',paymentRoutes);
 
 
 
 // Catch-all route for React to handle routing (important for single-page apps)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+ res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 
