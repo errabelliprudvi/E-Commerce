@@ -1,9 +1,10 @@
-import { Button } from "@mui/material";
+import { alertClasses, Button } from "@mui/material";
 import styles from './product.module.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useUser } from "../../UserProvider";
 import { getProductById, addToCart } from '../../api';
+import RazorpayCheckout from "../Razorpay/RazorpayCheckOut";
 
 export default function Product() {
   const { user, fetchNumberOfItemsInCart, setItemsInCart } = useUser();
@@ -12,7 +13,10 @@ export default function Product() {
   const [product, setProductDetails] = useState(null); // Initially null
   const [loading, setLoading] = useState(true); // Track loading state
   const [error, setError] = useState(null); // Track errors
+  const [buyNow,setBuyNow] =useState(false);
+  const [paymentStatus,setPaymentStatus] = useState(null);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,46 +49,74 @@ export default function Product() {
   };
 
   const handleBuyNow = async () => {
-    if (!user) {
+    if (user) {
+      const items = [{
+        product: product._id,
+        price: product.price,
+        quantity: 1
+      }];
+  
+      try {
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user,
+            items,
+            shippingAddress: {
+              street: "123 Main Street",
+              city: "Springfield",
+              state: "Illinois",
+              zip: "62704",
+              country: "USA"
+            },
+            paymentMethod: "Credit Card"
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to place the order');
+        }
+        const res = await response.json();
+        alert('Order Placed Successfully!');
+        console.log(res);
+      } catch (error) {
+        console.error('Error placing the order:', error.message);
+      }
+    }
+    else
+    {
       navigate("/login");
       return;
     }
-    const items = [{
-      product: product._id,
-      price: product.price,
-      quantity: 1
-    }];
-
-    try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user,
-          items,
-          shippingAddress: {
-            street: "123 Main Street",
-            city: "Springfield",
-            state: "Illinois",
-            zip: "62704",
-            country: "USA"
-          },
-          paymentMethod: "Credit Card"
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to place the order');
-      }
-      const res = await response.json();
-      console.log(res);
-    } catch (error) {
-      console.error('Error placing the order:', error.message);
-    }
+    
   };
 
   if (loading) return <div>Loading...</div>; // Show loading indicator
   if (error) return <div>Error: {error}</div>; // Show error message
+
+  if (buyNow) {
+    if (paymentStatus === "SUCCESS") {
+      // Reset states and refetch data after successful payment
+      
+      // Refetch cart data to show updated state
+      handleBuyNow(); // Optionally clear the cart after payment
+      setBuyNow(false);
+      return <h3>Payment successful! Your cart has been updated.</h3>;
+    }
+  
+    if (paymentStatus === "FAILED") {
+      setBuyNow(false); // Exit checkout flow
+      return <h3>Payment failed. Please try again.</h3>;
+    }
+  
+    return (
+      <div>
+        <RazorpayCheckout setPaymentStatus={setPaymentStatus} total={product.price} setCloseState={setBuyNow} />
+      </div>
+    );
+  }
+  
 
   // Show product details only after loading is complete
   return product && (
@@ -112,7 +144,7 @@ export default function Product() {
         <div className={styles.chart}>Size</div>
         <div className={styles.quantity}>Quantity</div>
         <div className={styles.cart}>
-          <Button onClick={handleBuyNow} variant="contained">Buy Now</Button>
+          <Button onClick={()=> {user?setBuyNow(true):navigate("/login")}} variant="contained">Buy Now</Button>
           <Button onClick={() => handleAddToCart(product)} variant="contained">Add To Cart</Button>
         </div>
       </div>

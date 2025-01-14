@@ -15,25 +15,25 @@ import { useState, useEffect } from "react";
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
 
-
+       // Replace with your API endpoint
+       const fetchData = async () => {
+        try {
+          console.log(userId);
+          const response = await fetch(`/api/orders/user/${userId}`); // API endpoint
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const result = await response.json();
+          setOrders(result);
+          console.log(result)
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
    
         useEffect(() => {
-            // Replace with your API endpoint
-            const fetchData = async () => {
-              try {
-                const response = await fetch(`/api/orders/user/${userId}`); // API endpoint
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                const result = await response.json();
-                setOrders(result);
-                console.log(result)
-              } catch (error) {
-                setError(error.message);
-              } finally {
-                setLoading(false);
-              }
-            };
         
             fetchData();
           }, []);

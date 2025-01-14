@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
-const RazorpayCheckout = ({setPaymentStatus, total}) => {
+const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
   //const [loading, setLoading] = useState(false);
 
   // Function to load Razorpay script
@@ -81,7 +81,7 @@ const RazorpayCheckout = ({setPaymentStatus, total}) => {
             console.log(data);
             if (data.message === 'Payment verified successfully') {
                 setPaymentStatus("SUCCESS");
-              alert('Payment verified successfully!');
+              //alert('Payment verified successfully!');
             } else {
                 setPaymentStatus("FAILD");
               alert('Payment verification failed!');
@@ -106,6 +106,14 @@ const RazorpayCheckout = ({setPaymentStatus, total}) => {
       theme: {
         color: '#3399cc',
       },
+      modal: {
+        ondismiss: function() {
+          // This is triggered when the Razorpay widget is closed
+          console.log('Razorpay widget closed by the user');
+          setCloseState(false);
+          // You can make an API call here to track the user closure if needed
+        }
+      }
     };
 
     const paymentObject = new window.Razorpay(options);
