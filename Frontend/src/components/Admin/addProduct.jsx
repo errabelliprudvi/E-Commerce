@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Button, Typography, Box, Select, MenuItem, InputLabel, FormControl, Stack } from '@mui/material';
-import {getCategories,addProduct} from '../../api'
+import { Container, TextField, Button, Typography, Box, Select, MenuItem, InputLabel, FormControl, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { getCategories, addProduct } from '../../api';
+
 const AddProductPage = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -10,6 +11,9 @@ const AddProductPage = () => {
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check if screen is mobile size
 
   // Fetch categories from backend
   const fetchCategories = async () => {
@@ -48,15 +52,15 @@ const AddProductPage = () => {
 
     try {
       // Make a POST request to add the product
-      const response = await addProduct(formData)
-        alert('Product added successfully!');
-        setName('');
-        setDescription('');
-        setPrice('');
-        setStock('');
-        setCategory('');
-        setImages([]);
-        setImagePreview([]);
+      const response = await addProduct(formData);
+      alert('Product added successfully!');
+      setName('');
+      setDescription('');
+      setPrice('');
+      setStock('');
+      setCategory('');
+      setImages([]);
+      setImagePreview([]);
     } catch (error) {
       console.error('Error adding product:', error);
     }
@@ -82,6 +86,7 @@ const AddProductPage = () => {
           onChange={(e) => setName(e.target.value)}
           margin="normal"
           required
+          sx={{ fontSize: isMobile ? '0.875rem' : '1rem' }}
         />
         <TextField
           label="Description"
@@ -91,6 +96,7 @@ const AddProductPage = () => {
           onChange={(e) => setDescription(e.target.value)}
           margin="normal"
           required
+          sx={{ fontSize: isMobile ? '0.875rem' : '1rem' }}
         />
         <TextField
           label="Price"
@@ -101,6 +107,7 @@ const AddProductPage = () => {
           margin="normal"
           required
           type="number"
+          sx={{ fontSize: isMobile ? '0.875rem' : '1rem' }}
         />
         <TextField
           label="Stock"
@@ -111,6 +118,7 @@ const AddProductPage = () => {
           margin="normal"
           required
           type="number"
+          sx={{ fontSize: isMobile ? '0.875rem' : '1rem' }}
         />
 
         {/* Category Selection */}
@@ -120,6 +128,7 @@ const AddProductPage = () => {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             label="Category"
+            sx={{ fontSize: isMobile ? '0.875rem' : '1rem' }}
           >
             {categories.map((cat) => (
               <MenuItem key={cat._id} value={cat._id}>
@@ -136,11 +145,12 @@ const AddProductPage = () => {
             accept="image/*"
             multiple
             onChange={handleImageChange}
+            style={{ fontSize: isMobile ? '0.75rem' : '1rem' }}
           />
           {imagePreview.length > 0 && (
             <Stack direction="row" spacing={2} marginTop={2} flexWrap="wrap">
               {imagePreview.map((preview, index) => (
-                <Box key={index} sx={{ width: 100, height: 100, marginBottom: 2 }}>
+                <Box key={index} sx={{ width: isMobile ? '70px' : '100px', height: isMobile ? '70px' : '100px', marginBottom: 2 }}>
                   <img
                     src={preview}
                     alt={`preview-${index}`}
@@ -159,6 +169,5 @@ const AddProductPage = () => {
     </Container>
   );
 };
-
 
 export default AddProductPage;

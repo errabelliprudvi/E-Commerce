@@ -17,12 +17,12 @@ import {
 
 
 
-const AuthPage = ({ setIsAuthenticated ,setUserId}) => {
+const AuthPage = ({ setIsAuthenticated }) => {
   
   const navigate = useNavigate()
   
 
-  const {setUser,fetchNumberOfItemsInCart} =useUser()
+  const {setUser,fetchNumberOfItemsInCart , setIsAdmin} =useUser()
   const [isLogin, setIsLogin] = useState(true); // Toggle Login/Sign-Up
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,14 +86,16 @@ const AuthPage = ({ setIsAuthenticated ,setUserId}) => {
           throw new Error(res.message || "Failed to log in.");
         }
       }
-
+      
       setMessage({ type: "success", text: "Login successful!" });
-      setIsAuthenticated(true); // Set user as authenticated
-      console.log(res.user.id)
-      setUserId(res.user.id)
-      setUser(res.user.id)
-      fetchNumberOfItemsInCart()
-      navigate('/')
+      console.log(res);
+      setIsAuthenticated(true)
+      //setIsAuthenticated(true); // Set user as authenticated
+      console.log(res.user.id);
+      setUser(res.user.id);
+      setIsAdmin(res.user.isAdmin);
+      fetchNumberOfItemsInCart();
+      navigate('/');
      // localStorage.setItem('isAuthenticated', true);
       //localStorage.setItem('userId',res.user.id)
     } catch (error) {

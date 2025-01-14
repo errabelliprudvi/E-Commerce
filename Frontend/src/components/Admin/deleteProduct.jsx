@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, Box, FormControl, Select, MenuItem, InputLabel, Stack, Card, CardContent, CardActions } from '@mui/material';
-import {getCategories,getProductsByCategory,deleteProduct} from '../../api'
-const  DeleteProductPage = () => {
+import { Container, Typography, Button, Box, FormControl, Select, MenuItem, InputLabel, Stack, Card, CardContent, CardActions, CircularProgress, Alert } from '@mui/material';
+import { getCategories, getProductsByCategory, deleteProduct } from '../../api';
+
+const DeleteProductPage = () => {
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState('');
   const [products, setProducts] = useState([]);
-  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   // Fetch categories from backend
   const fetchCategories = async () => {
     try {
@@ -19,11 +22,14 @@ const  DeleteProductPage = () => {
   // Fetch products by category
   const fetchProductsByCategory = async (categoryId) => {
     if (!categoryId) return;
+    setLoading(true);
     try {
       const data = await getProductsByCategory(categoryId);
       setProducts(data);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      setError('Error fetching products');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,12 +44,12 @@ const  DeleteProductPage = () => {
     const confirmDelete = window.confirm('Are you sure you want to delete this product?');
     if (confirmDelete) {
       try {
-        const response = await deleteProduct(productId);
-          alert('Product deleted successfully!');
-          setProducts(products.filter(product => product._id !== productId));
-        
+        await deleteProduct(productId);
+        alert('Product deleted successfully!');
+        setProducts(products.filter(product => product._id !== productId));
       } catch (error) {
         console.error('Error deleting product:', error);
+        alert('Error deleting product');
       }
     }
   };
@@ -54,7 +60,7 @@ const  DeleteProductPage = () => {
 
   return (
     <Container maxWidth="md" sx={{ paddingTop: 4 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom align="center">
         Delete Product
       </Typography>
 
@@ -65,6 +71,7 @@ const  DeleteProductPage = () => {
           value={category}
           onChange={handleCategoryChange}
           label="Category"
+          fullWidth
         >
           {categories.map((cat) => (
             <MenuItem key={cat._id} value={cat._id}>
@@ -74,21 +81,29 @@ const  DeleteProductPage = () => {
         </Select>
       </FormControl>
 
+      {/* Loading Indicator */}
+      {loading && <CircularProgress sx={{ display: 'block', margin: '20px auto' }} />}
+      
+      {/* Error Message */}
+      {error && <Alert severity="error" sx={{ marginBottom: 2 }}>{error}</Alert>}
+
       {/* Product List */}
       <Box marginTop={3}>
-        {products.length === 0 ? (
-          <Typography>No products available for this category.</Typography>
+        {products.length === 0 && !loading ? (
+          <Typography variant="body1" align="center">No products available for this category.</Typography>
         ) : (
           <Stack spacing={2}>
             {products.map((product) => (
-              <Card key={product._id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <CardContent sx={{ flex: 1 }}>
+              <Card key={product._id} sx={{ display: 'flex', flexDirection: 'column', boxShadow: 3 }}>
+                <CardContent>
                   <Typography variant="h6">{product.name}</Typography>
-                  <Typography variant="body2">{product.description}</Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    {product.description}
+                  </Typography>
                   <Typography variant="body2">Price: ${product.price}</Typography>
                   <Typography variant="body2">Stock: {product.stock}</Typography>
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{ justifyContent: 'center', marginBottom: 2 }}>
                   <Button variant="outlined" color="primary" sx={{ marginRight: 1 }}>
                     Edit
                   </Button>
@@ -109,4 +124,4 @@ const  DeleteProductPage = () => {
   );
 };
 
-export default DeleteProductPage ;
+export default DeleteProductPage;

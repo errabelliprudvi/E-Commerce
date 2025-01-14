@@ -1,6 +1,5 @@
-import React, { Children, useEffect, useState } from 'react';
-
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Shop from './Pages/Shop.jsx';
 import ProductPage from './Pages/ProductPage.jsx';
 import CartPage from './Pages/CartPage.jsx';
@@ -12,62 +11,49 @@ import ProfilePage from './Pages/ProfilePage.jsx';
 import LoginPage from './Pages/LoginPage.jsx';
 import SignUpPage from './Pages/SignUpPage.jsx';
 import AuthPage from './Pages/AuthPage.jsx';
-import AdminPage from './Pages/AdminPage.jsx'
+import AdminPage from './Pages/AdminPage.jsx';
 
-
+import { useUser } from './UserProvider.jsx';
 
 function App() {
-  //<Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated}/>}/>
-  const [isAuthenticated,setIsAuthenticated] = useState(false)
-  const [userId, setUserId]= useState()
-  const ProtectedRoute = ({isAuthenticated,children})=>{
-   return isAuthenticated ? children : <Navigate to="/login"/>;
-   
+  //const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState();
+  const{user,isAdmin,isAuthenticated,setIsAuthenticated} = useUser();
+
+  const ProtectedRoute = ({ isAuthenticated, children }) => {
+    return isAuthenticated ? children : <Navigate to="/login" />;
+  };
+  const ProtectedRouteA = ({ isAuthenticated, isAdmin, children }) => {
+    return isAuthenticated ? isAdmin ? children : alert("UnAuthorized Access"):<Navigate to="/login" />;
   };
 
-
-/*useEffect(()=>{
-  const authStatus = localStorage.getItem('isAuthenticated')
-  if(authStatus)
-  {
-    setIsAuthenticated(true)
-  }
-},[]);*/
-
-
+  // Persist authentication state (optional)
+  /*useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated');
+    if (authStatus) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+*/
   return (
-   
-  <BrowserRouter  future={{
-    v7_relativeSplatPath: true,
-    v7_startTransition: true,
-    
-
-  }}>
-    <Header userId={userId}/>
+    <BrowserRouter>
+      <Header userId={user} />
       <Routes>
-          
-          <Route path="/login" element={<AuthPage setIsAuthenticated={setIsAuthenticated} setUserId={setUserId}/>}/>
-          <Route path="/signup" element ={<SignUpPage/>} />
-          <Route path="/"  element={<Home/>}/>
-          <Route path="/shop" element={<Shop/>} />
-          <Route path="/product/:id"  element={<ProductPage/>}/>
-              <Route path="/cart" element={<ProtectedRoute isAuthenticated={isAuthenticated}>
-                                                                        <CartPage userId={userId}/>           
-                                                           </ProtectedRoute>} />
-              <Route path="/user/orders" element={<ProtectedRoute isAuthenticated={isAuthenticated}>
-                                                                         <OrdersPage  userId={userId}/>              
-                                                           </ProtectedRoute>}/>
-              <Route path ="/user/profile" element={<ProtectedRoute isAuthenticated={isAuthenticated}>
-                                                                         <ProfilePage userId={userId}/>              
-                                                           </ProtectedRoute>}/>
-              <Route path ="/bashboard" element={<ProtectedRoute isAuthenticated={isAuthenticated}>
-                                                                         <AdminPage/>              
-                                                           </ProtectedRoute>}/>
-              <Route path="*" element={<AdminPage/>} />
-          
+        <Route path="/login" element={<AuthPage setIsAuthenticated={setIsAuthenticated}  />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductPage />} />
+        
+        <Route path="/cart" element={<ProtectedRoute isAuthenticated={isAuthenticated}><CartPage userId={user} /></ProtectedRoute>} />
+        <Route path="/user/orders" element={<ProtectedRoute isAuthenticated={isAuthenticated}><OrdersPage userId={user} /></ProtectedRoute>} />
+        <Route path="/user/profile" element={<ProtectedRoute isAuthenticated={isAuthenticated}><ProfilePage userId={user} /></ProtectedRoute>} />
+        
+        <Route path="/dashboard" element={<ProtectedRouteA isAuthenticated={isAuthenticated} isAdmin={isAdmin}><AdminPage /></ProtectedRouteA>} />
+        <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
-  )
-} 
+  );
+}
 
-export default App
+export default App;

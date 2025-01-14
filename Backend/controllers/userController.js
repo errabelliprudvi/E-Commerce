@@ -258,7 +258,10 @@ exports.login = async (req, res) => {
     }
 
    
-    req.session.userId = user._id
+    req.session.userId = user._id;
+    req.session.username =user.name;
+    req.session.email = user.email;
+    req.session.isAdmin = user.isAdmin;
 
     res.status(200).json({
       message: "Login successful",
@@ -267,6 +270,7 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        isAdmin: user.isAdmin,
         addresses: user.addresses,
       },
     });

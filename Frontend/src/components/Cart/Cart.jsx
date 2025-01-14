@@ -63,6 +63,81 @@ export default function Cart({ userId }) {
     if (items.length) fetchProducts();
   }, [items]);
 
+
+
+  const handleBuyNow = async (item) => {
+        
+    const items =[{}]
+    item.map((ite,index)=>
+    (
+        items[index] ={"product": ite.product._id,
+                        "price":ite.product.price,
+                        "quantity":ite.quantity
+
+        }
+    )
+    );
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            
+                "user": userId,
+                "items": items,
+                "shippingAddress": {
+                  "street": "123 Main Street",
+                  "city": "Springfield",
+                  "state": "Illinois",
+                  "zip": "62704",
+                  "country": "USA"
+                },
+                "paymentMethod": "Credit Card"
+              
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to place the order');
+      }
+
+      const res = await response.json();
+      console.log(res); // Update local cart state with the response
+      alert(res.message)
+      clearCart()
+    } catch (error) {
+      console.error('Error placing the order:', error.message);
+    }
+  };
+
+  const clearCart = async () => {
+    try {
+      const response = await fetch(`/api/cart/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          // If your API requires an auth token:
+          // 'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to clear the cart');
+      }
+  
+      const data = await response.json();
+      setCartData([])
+      setItemsInCart(0)
+      console.log('cart  cleared successfully:', data);
+    } catch (error) {
+      console.error('Error  clearing cart:', error.message);
+    }
+  };
+  
+
+
   const handleRemoveFromCart = async (itemId) => {
     try {
       const response = await fetch('api/cart/item', {
@@ -90,6 +165,7 @@ export default function Cart({ userId }) {
 
   if (checkOut) {
     if (paymentStatus === "SUCCESS") {
+
       handleBuyNow(items); // Optionally clear the cart after payment
       setCheckOut(false);
       return <h3>Payment successful! Your cart has been updated.</h3>;

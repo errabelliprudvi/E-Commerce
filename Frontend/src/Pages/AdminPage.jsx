@@ -4,7 +4,7 @@ import OrdersPage from "../components/Admin/viewOrders.jsx"; // Import your orde
 import ProductsPage from "../components/Admin/addProduct.jsx"; // Import your products page
 import DeleteProductPage from "../components/Admin/deleteProduct.jsx"; // Import your users page
 import CategoriesPage from "../components/Admin/addCategory.jsx";
-
+import AdminDataDashboard from "../components/Admin/adminDataDashboard.jsx";
 
 
 
@@ -24,6 +24,8 @@ const AdminDashboard = () => {
         return <CategoriesPage />;
       case "Delete Products":
         return <DeleteProductPage />;
+      case "Data":
+        return <AdminDataDashboard />;
       default:
         return <div>Select a page from the menu</div>;
     }
@@ -44,6 +46,18 @@ const AdminDashboard = () => {
       >
         <h2>Admin Dashboard</h2>
         <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+        <li
+            style={{
+              padding: "10px",
+              cursor: "pointer",
+              backgroundColor: selectedPage === "Data" ? "#34495E" : "transparent",
+              borderRadius: "5px",
+              margin: "10px 0",
+            }}
+            onClick={() => setSelectedPage("Data")}
+          >
+            Data Dashboard
+          </li>
           <li
             style={{
               padding: "10px",

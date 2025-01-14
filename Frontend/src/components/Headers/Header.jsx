@@ -1,22 +1,55 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate} from 'react-router-dom';
 import ShoppingCartCheckoutSharpIcon from '@mui/icons-material/ShoppingCartCheckoutSharp';
 import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Toolbar, Typography, Box, Button, IconButton, Badge, Menu, MenuItem, useMediaQuery, useTheme } from '@mui/material';
+
+import { AppBar, Toolbar, Typography, Box, Button, IconButton, Badge, Menu, MenuItem, useMediaQuery, useTheme,Tooltip } from '@mui/material';
 import img from '../../assets/react.svg';
 import { useUser } from '../../UserProvider';
 
 export default function Header({userId}) {
   //const userId = localStorage.getItem('userId');
-  const { user, itemsInCart } = useUser();
+  const { user, itemsInCart, isAdmin ,signOut} = useUser();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Adjust for small screens (600px or below)
 
+   const navigate = useNavigate(); 
   const [menuAnchor, setMenuAnchor] = React.useState(null);
   const openMenu = (event) => setMenuAnchor(event.currentTarget);
   const closeMenu = () => setMenuAnchor(null);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async()=>{
+    try
+    {
+      const res = await fetch('/user/logout',{method:'POST'});
+
+      if(res.ok){
+        console.log(res.json())
+        signOut();
+        navigate('/');
+      }
+      else{
+        console.log(res.json())
+      }
+
+    }
+    catch(error)
+    {
+      console.log(error)
+    }
+
+  };
 
   return (
     <AppBar
@@ -72,9 +105,12 @@ export default function Header({userId}) {
               <MenuItem component={Link} to="/contact" onClick={closeMenu}>
                 Contact Us
               </MenuItem>
-              <MenuItem component={Link} to="/adminDash" onClick={closeMenu}>
-                Admin
+              {isAdmin && (
+                <MenuItem component={Link} to="/dashboard" onClick={closeMenu}>
+                Admin 
               </MenuItem>
+            )}
+              
             </Menu>
           </>
         ) : (
@@ -91,9 +127,12 @@ export default function Header({userId}) {
             <Button component={Link} to="/contact" color="inherit" sx={{ fontSize: '1.1rem', textTransform: 'capitalize' }}>
               Contact Us
             </Button>
-            <Button component={Link} to="/adminDash" color="inherit" sx={{ fontSize: '1.1rem', textTransform: 'capitalize' }}>
-              Admin
-            </Button>
+            {isAdmin && (
+              <Button component={Link} to="/dashboard" color="inherit" sx={{ fontSize: '1.1rem', textTransform: 'capitalize' }}>
+                Admin Dashboard
+              </Button>
+            )}
+            
           </Box>
         )}
 
@@ -101,20 +140,57 @@ export default function Header({userId}) {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {/* User Profile or Login */}
           {userId ? (
-            <IconButton
-              component={Link}
-              to="/user/profile"
-              color="inherit"
-              aria-label="User profile"
+                
+           <div>
+           <IconButton
+           id='personIcon'
+           onClick={handleClick}
+           aria-controls={open ? 'basic-menu' : undefined}
+           aria-haspopup="true"
+           aria-expanded={open ? 'false' : undefined}
+                 >
+                   <PersonIcon sx={{ fontSize: isMobile ? 25 : 30 }} />
+                 </IconButton>
+           <Menu
+             id="basic-menu"
+             anchorEl={anchorEl}
+             open={open}
+             onClose={handleClose}
+             MenuListProps={{
+               'aria-labelledby': 'basic-button',
+             }}
+           >
+             <MenuItem onClick={()=>navigate("/user/profile")}>Profile</MenuItem>
+             <MenuItem onClick={handleLogout}>Logout</MenuItem>
+           </Menu>
+         </div>
+          ) : (
+            <div>
+      
+      <IconButton
+      id='personIcon'
+      onClick={handleClick}
+      aria-controls={open ? 'basic-menu' : undefined}
+      aria-haspopup="true"
+      aria-expanded={open ? 'false' : undefined}
             >
               <PersonIcon sx={{ fontSize: isMobile ? 25 : 30 }} />
             </IconButton>
-          ) : (
-            <Button component={Link} to="/login" color="inherit" sx={{ fontSize: '1rem', textTransform: 'capitalize' }}>
-              Login
-            </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={()=>navigate("/login")}>Login</MenuItem>
+      </Menu>
+    </div>
           )}
-
+           
+          
           {/* Cart Icon */}
           <IconButton
             component={Link}
@@ -131,3 +207,6 @@ export default function Header({userId}) {
     </AppBar>
   );
 }
+
+
+

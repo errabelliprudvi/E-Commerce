@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Button, Typography, Box, Card, CardContent, Stack } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, Card, CardContent, Stack, useMediaQuery, useTheme } from '@mui/material';
 import { getCategories, addCategory, uploadFile } from '../../api';
 
 const AddCategoryPage = () => {
@@ -7,6 +7,9 @@ const AddCategoryPage = () => {
   const [categoryDescription, setCategoryDescription] = useState('');
   const [categories, setCategories] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detect if screen is small
 
   // Frontend: Example of image upload form
   const handleImageUpload = (event) => {
@@ -75,7 +78,6 @@ const AddCategoryPage = () => {
           />
 
           <input type="file" onChange={handleImageUpload} />
-
           <Button type="submit" variant="contained" fullWidth>
             Add Category
           </Button>
@@ -84,28 +86,40 @@ const AddCategoryPage = () => {
 
       {/* Categories List */}
       <Stack spacing={4}>
-        {categories.map((category) => (
-          <Card key={category._id}>
-            <CardContent>
-              <Typography variant="h6" component="div">
-                {category.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" paragraph>
-                {category.description || 'No description available.'}
-              </Typography>
-              {category.image && (
-                <img
-                  src={`/images/${category.image}`} // Assuming image is served statically
-                  alt={category.name}
-                  style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
-                />
-              )}
-              <Typography variant="body2" color="text.secondary">
-                Created at: {new Date(category.createdAt).toLocaleString()}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
+        <Box
+          sx={{
+            maxHeight: '400px', // Limiting height of the category list
+            overflowY: 'auto', // Adding scroll if there are too many categories
+          }}
+        >
+          {categories.map((category) => (
+            <Card key={category._id} sx={{ marginBottom: 2 }}>
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  {category.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  {category.description || 'No description available.'}
+                </Typography>
+                {category.image && (
+                  <img
+                    src={`/images/${category.image}`} // Assuming image is served statically
+                    alt={category.name}
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      objectFit: 'cover',
+                      marginTop: '10px',
+                    }}
+                  />
+                )}
+                <Typography variant="body2" color="text.secondary">
+                  Created at: {new Date(category.createdAt).toLocaleString()}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
       </Stack>
     </Container>
   );

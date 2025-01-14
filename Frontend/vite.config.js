@@ -16,7 +16,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false, 
       },
-      '/image': {
+      '/images': {
         target: 'http://localhost:3000', // Your Express backend
         changeOrigin: true,
         secure: false, 

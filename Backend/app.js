@@ -51,16 +51,16 @@ app.use((req, res, next) => {
 
 app.use(session)
 
-app.use('/api/users',userRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/admin',demoRoute)
-app.use('/api/orders', orderRoutes);
-app.use('/api/cart', cartRoutes);
+app.use('/api/users',isAuthenticated, userRoutes);
+app.use('/api/products',  productRoutes);
+app.use('/api/admin',isAuthenticated,demoRoute)
+app.use('/api/orders',isAuthenticated, orderRoutes);
+app.use('/api/cart',isAuthenticated, cartRoutes);
 app.use('/api/category',categoryRoutes);
 app.use('/api/ratings', ratingRoutes);
 app.use('/user',authRoutes)
-app.use('/api/upload',uploadRoutes)
-app.use('/api',paymentRoutes);
+app.use('/api/upload', isAuthenticated ,uploadRoutes)
+app.use('/api', isAuthenticated,paymentRoutes);
 
 
 

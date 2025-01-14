@@ -1,17 +1,32 @@
 import React, { useEffect, useState } from "react";
-import {getOrders,updateOrderStatus} from '../../api'
+import { getOrders, updateOrderStatus } from '../../api';
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Select,
+  MenuItem,
+  Typography,
+  Box,
+  CircularProgress,
+  Alert,
+  Grid
+} from '@mui/material';
 
-
-const  AdminOrdersPage = () => {
+const AdminOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
+  // Fetch orders from the backend
   const fetchOrders = async () => {
     try {
       const data = await getOrders();
-      console.log(data);
       setOrders(data);
     } catch (err) {
       setError(err.message);
@@ -19,75 +34,79 @@ const  AdminOrdersPage = () => {
       setLoading(false);
     }
   };
-  // Fetch orders from the backend
-  useEffect(() => {
-    fetchOrders();
-  }, []);
 
   // Update order status
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const updatedOrder = await updateOrderStatus(orderId,{orderStatus: newStatus});
-      setOrders((prevOrders) =>
+      const updatedOrder = await updateOrderStatus(orderId, { orderStatus: newStatus });
+      /*setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === updatedOrder._id ? updatedOrder : order
         )
-      );
+      );*/
+      fetchOrders();
     } catch (err) {
       alert(`Error updating order status: ${err.message}`);
     }
   };
 
-  if (loading) return <p>Loading orders...</p>;
-  if (error) return <p>Error: {error}</p>;
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">{error}</Alert>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Admin Orders</h1>
-      <table border="1" style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>User</th>
-            <th>Items</th>
-            <th>Total Price</th>
-            <th>Order Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order._id}>
-              <td>{order._id}</td>
-              <td>{order.user}</td>
-              <td>
-                {order.items.map((item, index) => (
-                  <div key={index}>
-                    {item.product} x {item.quantity}
-                  </div>
-                ))}
-              </td>
-              <td>${order.totalPrice.toFixed(2)}</td>
-              <td>{order.orderStatus}</td>
-              <td>
-                <select
-                  value={order.orderStatus}
-                  onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Container sx={{ paddingTop: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Admin Orders
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="admin orders table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Order ID</TableCell>
+              <TableCell align="left">User</TableCell>
+              <TableCell align="left">Items</TableCell>
+              <TableCell align="left">Total Price</TableCell>
+              <TableCell align="left">Order Status</TableCell>
+              <TableCell align="left">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow key={order._id}>
+                <TableCell align="left">{order._id}</TableCell>
+                <TableCell align="left">{order.user}</TableCell>
+                <TableCell align="left">
+                  {order.items.map((item, index) => (
+                    <div key={index}>
+                      {item.product} x {item.quantity}
+                    </div>
+                  ))}
+                </TableCell>
+                <TableCell align="left">${order.totalPrice.toFixed(2)}</TableCell>
+                <TableCell align="left">{order.orderStatus}</TableCell>
+                <TableCell align="left">
+                  <Select
+                    value={order.orderStatus}
+                    onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                    fullWidth
+                  >
+                    <MenuItem value="Pending">Pending</MenuItem>
+                    <MenuItem value="Shipped">Shipped</MenuItem>
+                    <MenuItem value="Delivered">Delivered</MenuItem>
+                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                  </Select>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 
-
-export default  AdminOrdersPage;
-
+export default AdminOrdersPage;

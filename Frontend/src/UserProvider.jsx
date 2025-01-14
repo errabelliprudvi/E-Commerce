@@ -5,9 +5,24 @@ const UserContext = createContext();
 
 // Provider Component
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Initialize with null to indicate no user
+  const [user, setUser] = useState(); // Initialize with null to indicate no user
   const [itemsInCart, setItemsInCart] = useState(0); // Start with 0 items
   const [loading, setLoading] = useState(false); // Add loading state for feedback
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+ 
+
+
+  const signOut = ()=>{
+    setUser(null);
+    setIsAdmin(false);
+    setItemsInCart(0);
+    setIsAuthenticated(false);
+
+  };
+
+
+
 
   const fetchNumberOfItemsInCart = async () => {
     if (!user) {
@@ -55,6 +70,11 @@ export const UserProvider = ({ children }) => {
         setItemsInCart,
         fetchNumberOfItemsInCart,
         loading,
+        isAdmin,
+        setIsAdmin,
+        signOut,
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       {children}
