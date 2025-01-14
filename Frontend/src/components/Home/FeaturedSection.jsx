@@ -1,8 +1,7 @@
-import pex from '../assets/pex.jpg';
-import cam from '../assets/cam.jpg';
-import stu from '../assets/stu.jpg';
+import pex from '../../assets/pex.jpg';
+import cam from '../../assets/cam.jpg';
+import stu from '../../assets/stu.jpg';
 import styles from './featuredSection.module.css';
-
 export default function FeaturedSection({ name }) {
     const items = [pex, cam, pex, stu];
 

@@ -1,27 +1,21 @@
 
 import { useState, useEffect } from 'react' 
-import { Button } from '@mui/material'
-import pex from '../../assets/pex.jpg'
-import cam from '../../assets/cam.jpg'
-import stu from '../../assets/stu.jpg'
 import styles from './shop.module.css'
 import {getCategories,getProductsByCategory} from '../../api'
+
+
 export default function Category({setProducts}){
 
-  //const data = [{img:stu,name:'Mens'},{img:pex,name:'Women'},{img:cam,name:'Jeans'},{img:stu,name:'Children'}]
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [selectedCategory, setSelectedCategory] = useState(null); // State for selected category
-  //const [products, setProducts] = useState([]); // State for products of selected category
-
+  const [selectedCategory, setSelectedCategory] = useState(null); 
 
   useEffect(() => {
-    // Replace with your API endpoint
     const fetchData = async () => {
       try {
-        const categories = await getCategories(); // API endpoint
+        const categories = await getCategories(); 
         setData(categories);
         console.log(categories)
       } catch (error) {
@@ -37,8 +31,7 @@ export default function Category({setProducts}){
 
   const handleCategoryClick = async (categoryId) => {
     console.log(categoryId)
-    setSelectedCategory(categoryId); // Set the selected category
-    // Fetch products for the selected category
+    setSelectedCategory(categoryId); 
     try {
       const productsData = await getProductsByCategory(categoryId);
       setProducts(productsData);

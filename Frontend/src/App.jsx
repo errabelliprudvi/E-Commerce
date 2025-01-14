@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Shop from './Pages/Shop.jsx';
+import Shop from './Pages/ShopPage.jsx';
 import ProductPage from './Pages/ProductPage.jsx';
 import CartPage from './Pages/CartPage.jsx';
-import Home from './Pages/Home.jsx';
+import Home from './Pages/HomePage.jsx';
 import NoPage from './Pages/NoPage.jsx';
 import Header from './components/Headers/Header.jsx';
 import OrdersPage from './Pages/OrdersPage.jsx';
 import ProfilePage from './Pages/ProfilePage.jsx';
-import LoginPage from './Pages/LoginPage.jsx';
-import SignUpPage from './Pages/SignUpPage.jsx';
 import AuthPage from './Pages/AuthPage.jsx';
 import AdminPage from './Pages/AdminPage.jsx';
 
@@ -40,7 +38,6 @@ function App() {
       <Header userId={user} />
       <Routes>
         <Route path="/login" element={<AuthPage setIsAuthenticated={setIsAuthenticated}  />} />
-        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/product/:id" element={<ProductPage />} />

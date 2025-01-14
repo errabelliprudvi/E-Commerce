@@ -1,4 +1,4 @@
-import Header from "../components/Header"
+
 import Category from "../components/Shop/Category"
 import ProductsList from "../components/Shop/ProductsList"
 import { useState } from "react"

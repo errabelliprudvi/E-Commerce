@@ -1,6 +1,6 @@
-import pex from '../assets/pex.jpg';
-import cam from '../assets/cam.jpg';
-import stu from '../assets/stu.jpg';
+import pex from '../../assets/pex.jpg';
+import cam from '../../assets/cam.jpg';
+import stu from '../../assets/stu.jpg';
 import styles from './popularProducts.module.css';
 
 export default function PopularProducts() {

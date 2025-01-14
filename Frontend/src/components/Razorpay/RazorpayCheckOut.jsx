@@ -1,11 +1,9 @@
-// RazorpayCheckout.jsx
+
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
 const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
-  //const [loading, setLoading] = useState(false);
-
-  // Function to load Razorpay script
+  
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement('script');
@@ -16,18 +14,17 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
     });
   };
 
-  // Function to create the order and initiate Razorpay payment
+  
   const handlePayment = async () => {
 
 
-    // Call your backend to create an order
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount:total, // Amount in paise (₹500.00)
+        amount:total, 
       }),
     });
 
@@ -39,9 +36,7 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
 
     const order = await response.json();
     console.log(order);
-    //const { orderId } = data.id; // Get the orderId from the backend response
-
-    // Load Razorpay script if not already loaded
+    
     const isScriptLoaded = await loadRazorpayScript();
     if (!isScriptLoaded) {
       alert('Failed to load Razorpay SDK. Please check your connection.');
@@ -55,17 +50,10 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
       currency: order.currency,
       name: 'Your Company Name',
       description: 'Test Transaction',
-      order_id: order.id, // Use the order_id returned by backend
-     /* handler: function (response) {
-        console.log('Payment successful:', response);
-        alert(`Payment ID: ${response.razorpay_payment_id}`);
-      },*/
+      order_id: order.id, 
       handler: function (response) {
         console.log('Payment successful:', response);
-       // alert(`Payment ID: ${response.razorpay_payment_id}`);
-      
-        // Send payment details to backend for verification
-         fetch('/api/verify-payment', {
+       fetch('/api/verify-payment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -132,7 +120,3 @@ useEffect(() => {
 };
 
 export default RazorpayCheckout;
-
-//  <button onClick={handlePayment} style={{ padding: '10px 20px', fontSize: '16px' }} disabled={loading}>
-//{loading ? 'Loading...' : 'Pay Now'}
-//</button>
