@@ -10,35 +10,21 @@ const ratingRoutes = require('./routes/ratingRoutes');
 const authRoutes = require('./routes/authRoutes')
 const uploadRoutes = require('./routes/uploadRoutes')
 const paymentRoutes = require('./routes/paymentRoutes');
-
 const isAuthenticated = require('./middlewares/auth')
 const demoRoute = require('./routes/demoRoute')
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const session = require('./middlewares/Session')
-// Load environment variables
+const session = require('./middlewares/Session').default
+
 const connectDB = require('./db/connect');
 require('dotenv').config();
 
-// Serve static files from the "public" directory
-//app.use(express.static('public'));
-
-// Serve static files from the 'dist' folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.json());
-// Add CORS middleware
-app.use(
-  cors({
-    origin: 'http://localhost:5173', // Frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-    credentials: true, // Allow credentials (cookies, etc.)
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-  })
-);
 
-
+app.use(cors());
+//app.use(session);
 app.use(express.json({ limit: '10mb' })); // Increase JSON payload limit to 10MB
 app.use(express.urlencoded({ extended: true, limit: '10mb' })); // For URL-encoded payloads
 
@@ -48,8 +34,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-app.use(session)
 
 app.use('/api/users',isAuthenticated, userRoutes);
 app.use('/api/products',  productRoutes);
@@ -63,16 +47,10 @@ app.use('/api/upload', isAuthenticated ,uploadRoutes)
 app.use('/api', isAuthenticated,paymentRoutes);
 
 
-
-// Catch-all route for React to handle routing (important for single-page apps)
 app.get('*', (req, res) => {
  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-
-
-//const PORT = process.env.PORT || 5000;
-//app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const port = process.env.PORT || 3000;
 // Start the server

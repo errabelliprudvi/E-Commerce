@@ -72,7 +72,7 @@ export default function Header({userId}) {
               fontSize: isMobile ? '1.2rem' : '1.5rem', // Adjust font size dynamically
             }}
           >
-            E-Commerce
+             Grospr  
           </Typography>
         </Box>
 

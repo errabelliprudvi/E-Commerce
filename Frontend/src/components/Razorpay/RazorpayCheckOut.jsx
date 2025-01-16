@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { createPaymentOrder, verifyPayment } from '../../api';
 
 const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
-  
+  const rKey = import.meta.env.RAZORPAY_KEY;
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement('script');
@@ -35,7 +35,7 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
     }
 
     const options = {
-      key: 'rzp_test_a6FSh538GCokzj', // Your Razorpay key
+      key: rKey, // Your Razorpay key
       amount: order.amount, // Amount in paise (₹500.00)
       currency: order.currency,
       name: 'Your Company Name',

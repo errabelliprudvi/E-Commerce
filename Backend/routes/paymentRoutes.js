@@ -4,11 +4,12 @@ const crypto = require('crypto');
 
 // Initialize router
 const router = express.Router();
-
+const key_id = process.env.RKEY_ID;
+const key_secret =process.env.RSECRET;
 // Razorpay Instance
 const razorpay = new Razorpay({
-    key_id: 'rzp_test_a6FSh538GCokzj', // Replace with your Razorpay Key ID
-    key_secret: 'OcqNgmHt5FWfROjTsExdetMP', // Replace with your Razorpay Key Secret
+    key_id: `${key_id}`,
+    key_secret: `${key_secret}`
 });
 
 // Route to Create an Order
@@ -32,7 +33,7 @@ router.post('/verify-payment', async (req, res) => {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
         const generatedSignature = crypto
-            .createHmac('sha256', 'OcqNgmHt5FWfROjTsExdetMP') // Replace with your Razorpay Key Secret
+            .createHmac('sha256', `${process.env.RSECRET}`) // Replace with your Razorpay Key Secret
             .update(razorpay_order_id + '|' + razorpay_payment_id)
             .digest('hex');
 

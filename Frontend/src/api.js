@@ -1,6 +1,7 @@
 // api.js
-export const API_URL = ''; // Replace with your base URL
+const API_URL = import.meta.env.AWS_URL ||''; // Replace with your base URL
 
+//const apiUrl = import.meta.env.VITE_API_URL;
 
 
 // Utility function for fetching data
@@ -64,7 +65,7 @@ export const removeFromCart = (options) => {
               });};     
      
 export const clearUserCart = (userId) => {
-              return fetchData(`/api/cart/${userId}`, {
+              return fetchData(`${API_URL}/api/cart/${userId}`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
