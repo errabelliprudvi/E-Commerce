@@ -23,7 +23,7 @@ function App() {
   const ProtectedRouteA = ({ isAuthenticated, isAdmin, children }) => {
     return isAuthenticated ? isAdmin ? children : alert("UnAuthorized Access"):<Navigate to="/login" />;
   };
-
+ 
   
   return (
     <BrowserRouter>

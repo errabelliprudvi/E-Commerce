@@ -51,6 +51,7 @@ export const UserProvider = ({ children }) => {
   useEffect(()=>
   {
     fetchNumberOfItemsInCart()
+  
   }
 
   ,[user]

@@ -1,5 +1,5 @@
 // api.js
-const API_URL = import.meta.env.AWS_URL ||''; // Replace with your base URL
+const API_URL = import.meta.env.AWS_URL ||"http://15.207.40.188:3000"; // Replace with your base URL
 
 //const apiUrl = import.meta.env.VITE_API_URL;
 
