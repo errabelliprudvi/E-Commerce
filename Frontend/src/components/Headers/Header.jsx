@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Toolbar, Typography, Box, Button, IconButton, Badge, Menu, MenuItem, useMediaQuery, useTheme,Tooltip } from '@mui/material';
 import img from '../../assets/react.svg';
 import { useUser } from '../../UserProvider';
+import { userlogOut } from '../../api';
 
 export default function Header({userId}) {
   //const userId = localStorage.getItem('userId');
@@ -32,17 +33,10 @@ export default function Header({userId}) {
   const handleLogout = async()=>{
     try
     {
-      const res = await fetch('/user/logout',{method:'POST'});
+      const res = await userlogOut();
 
-      if(res.ok){
-        console.log(res.json())
         signOut();
         navigate('/');
-      }
-      else{
-        console.log(res.json())
-      }
-
     }
     catch(error)
     {

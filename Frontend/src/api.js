@@ -1,5 +1,5 @@
 // api.js
-//const API_URL = "http://localhost:3000/"; // Replace with your base URL
+export const API_URL = ''; // Replace with your base URL
 
 
 
@@ -21,18 +21,18 @@ const fetchData = async (url, options = {}) => {
                         
  
 // login /logOut and SignUP API Methods
-export  const login = (loginDetails) => {
-              return fetchData("/user/login", {
+export  const userlogin = (loginDetails) => {
+              return fetchData(`${API_URL}/user/login`, {
                 method:"POST",
                 headers:{"Content-type": "application/json"},
                 body:JSON.stringify(loginDetails),
               });};
 
-export const  logOut =  () => {
-              return fetchData("/user/logout", {method:"POST"});};            
+export const  userlogOut =  () => {
+              return fetchData(`${API_URL}/user/logout`, {method:"POST"});};            
 
-export const  signUP = (signUpDetails) => {
-              return fetchData("/user/signup", {
+export const  userSignUp = (signUpDetails) => {
+              return fetchData(`${API_URL}/user/signup`, {
                 method:"POST",
                 headers:{"Content-type": "application/json"},
                 body:JSON.stringify(signUpDetails),
@@ -40,107 +40,107 @@ export const  signUP = (signUpDetails) => {
 
 
 //user API methods
-export const getUserDetailsById = (userID) => fetchData(`/api/users/${userID}`);
+export const getUserDetailsById = (userID) => fetchData(`${API_URL}/api/users/${userID}`);
 
-export const  getUserCart = (userID) => fetchData(`/api/cart/${userID}`);
+export const  getUserCart = (userID) => fetchData(`${API_URL}/api/cart/${userID}`);
               
-export const getUserOrders = (userId) => fetchData(`//api/orders/user/${userId}`);
+export const getUserOrders = (userId) => fetchData(`${API_URL}/api/orders/user/${userId}`);
 
 
 export const addToCart =  (options) => {
-              return fetchData("/api/cart",{
+              return fetchData(`${API_URL}/api/cart`,{
               method: "POST" ,
               headers: {"Content-type": "application/json"},
               body: JSON.stringify(options),
-            });
-            };
+            });};
 
 export const removeFromCart = (options) => {
-             return fetchData('api/cart/item', {
+             return fetchData(`${API_URL}/api/cart/item`, {
               method: 'DELETE',
               headers: {
                   'Content-Type': 'application/json',
               },
               body: JSON.stringify(options),
-              });
-             };     
-             
+              });};     
+     
+export const clearUserCart = (userId) => {
+              return fetchData(`/api/cart/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },});};           
+
 export const placeOrder = (options) => {
-              return fetchData('api/orders', {
+              return fetchData(`${API_URL}/api/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(options),
-                });
-              };
+                });};
 
             
 // products API methods
-export const getCategories = () => fetchData("/api/category");
+export const getCategories = () => fetchData(`${API_URL}/api/category`);
 
-export const getProducts = () => fetchData("/api/products");
+export const getProducts = () => fetchData(`${API_URL}/api/products`);
 
-export const getProductById = (id) => fetchData(`/api/products/${id}`);
+export const getProductById = (id) => fetchData(`${API_URL}/api/products/${id}`);
 
-export const getProductsByCategory = (catId) => fetchData(`/api/products/category/${catId}`);
+export const getProductsByCategory = (catId) => fetchData(`${API_URL}/api/products/category/${catId}`);
 
 
 
 //Admin API methods
-export const getOrders = () => fetchData("/api/orders");
+export const getOrders = () => fetchData(`${API_URL}/api/orders`);
 
 export const addProduct = (productData) => {
-              return fetchData("/api/admin/addProduct", {
+              return fetchData(`${API_URL}/api/admin/addProduct`, {
                 method: "POST",
                 body: productData,
               });};
 
 export const deleteProduct = (productId) => {
-              return fetchData(`/api/products/${productId}`, {
+              return fetchData(`${API_URL}/api/products/${productId}`, {
               method: "DELETE",
               });};
 
 export const addCategory = (newCategory) => {
-              return fetchData("/api/admin/addCategory", {
+              return fetchData(`${API_URL}/api/admin/addCategory`, {
               method: "POST",
               body: newCategory,
               });};
 
 
 export const updateOrderStatus = (orderId,options) => {
-              return fetchData(`/api/orders/${orderId}`, {
+              return fetchData(`${API_URL}/api/orders/${orderId}`, {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(options),
-            });
-            };
+            });};
 
 export const uploadFile = (formData) =>{
-              return  fetchData(`/api/upload/image`, {
+              return  fetchData(`${API_URL}/api/upload/image`, {
               method: 'POST',
               body: formData,
-            });
-            };
+            });};
 
 //Payment API methods
 export const createPaymentOrder = (amount) => {
-            return fetchData('/api/create-order', {
+            return fetchData(`${API_URL}/api/create-order`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(amount),
-          });
-         };
+          });};
 
 
 export const verifyPayment = (options) =>{
-              return fetch('/api/verify-payment', {
+              return fetchData(`${API_URL}/api/verify-payment`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(options),
-              });
-            }         
+              });};        

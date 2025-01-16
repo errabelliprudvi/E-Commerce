@@ -1,15 +1,13 @@
 
 import React from 'react';
 import { Box, Typography, Card, CardContent, Divider, Grid, Paper } from '@mui/material';
-import { useParams } from 'react-router-dom';
 import { useState, useEffect } from "react";
+import { getUserOrders } from '../../api';
 
-//const OrdersPage = ({ orders }) => 
+
     
     export default function Orders({userId}){
 
-        //const { userId } = useParams(); // Extract the product ID from the URL
-        //const  userId = localStorage.getItem('userId')
         
         const [orders, setOrders] = useState([]);
         const [loading, setLoading] = useState(true);
@@ -18,12 +16,7 @@ import { useState, useEffect } from "react";
        // Replace with your API endpoint
        const fetchData = async () => {
         try {
-          console.log(userId);
-          const response = await fetch(`/api/orders/user/${userId}`); // API endpoint
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const result = await response.json();
+          const result = await getUserOrders(userId);
           setOrders(result);
           console.log(result)
         } catch (error) {

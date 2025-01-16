@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { getUserCart } from "./api";
 
 // Create UserContext
 const UserContext = createContext();
@@ -24,33 +25,27 @@ export const UserProvider = ({ children }) => {
 
 
 
+  
   const fetchNumberOfItemsInCart = async () => {
-    if (!user) {
-      console.log("User not logged in. Cannot fetch cart.");
+    if (!user) 
+      {
       return;
-    }
+      }
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/cart/${user}`);
-      if (!response.ok) {
-        if (response.status === 404) {
-          console.log("Your Cart is Empty...");
-          setItemsInCart(0); // Set count to 0 if the cart is empty
-          return;
+         const result = await getUserCart(user);
+        setItemsInCart(result.items.length || 0); // Update count of items
+        console.log("Cart data fetched:", result);
+        } 
+        catch (error) {
+        console.error("Error fetching cart data:", error.message);
+        } 
+        finally {
+        setLoading(false);
         }
-        throw new Error("Failed to fetch cart data.");
-      }
+        };
 
-      const result = await response.json();
-      setItemsInCart(result.items.length || 0); // Update count of items
-      console.log("Cart data fetched:", result);
-    } catch (error) {
-      console.error("Error fetching cart data:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
   useEffect(()=>

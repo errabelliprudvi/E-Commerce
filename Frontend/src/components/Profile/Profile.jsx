@@ -1,34 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography, Card, Avatar, Button, Divider, Link, Box, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom"; // For navigation
+import { getUserDetailsById } from "../../api";
 
 const ProfilePage = ({ userId }) => {
-  const userD = {
-    name: "John Doe",
-    email: "johndoe@example.com",
-    avatar: "https://via.placeholder.com/150",
-  };
+ 
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch(`/api/users/${userId}`);
-        if (!response.ok) {
-          if (response.status === 404) {
-            console.log("Your Cart is Empty...");
-            setItemsInCart(0); // Set count to 0 if the cart is empty
-            return;
-          }
-          throw new Error("Failed to fetch cart data.");
-        }
-
-        const result = await response.json();
-        setUser(result); // Update count of items
-        console.log("Cart data fetched:", result);
+        
+        const result = await getUserDetailsById(userId);
+        setUser(result); 
+      
       } catch (error) {
-        console.error("Error fetching cart data:", error.message);
+        console.error("Error fetching user data:", error.message);
       } finally {
         setLoading(false);
       }

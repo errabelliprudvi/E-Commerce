@@ -3,7 +3,7 @@ import styles from './product.module.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useUser } from "../../UserProvider";
-import { getProductById, addToCart } from '../../api';
+import { getProductById, addToCart, placeOrder } from '../../api';
 import RazorpayCheckout from "../Razorpay/RazorpayCheckOut";
 
 export default function Product() {
@@ -35,10 +35,10 @@ export default function Product() {
     if (user) {
       try {
         const response = await addToCart({
-          userId: user,
-          product: item._id,
-          quantity: 1
-        });
+                                        userId: user,
+                                        product: item._id,
+                                        quantity: 1
+                                      });
         setItemsInCart(response.cart.items.length || 0);
       } catch (error) {
         console.error('Error adding to cart:', error.message);
@@ -57,29 +57,21 @@ export default function Product() {
       }];
   
       try {
-        const response = await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user,
-            items,
-            shippingAddress: {
-              street: "123 Main Street",
-              city: "Springfield",
-              state: "Illinois",
-              zip: "62704",
-              country: "USA"
-            },
-            paymentMethod: "Credit Card"
-          }),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to place the order');
-        }
-        const res = await response.json();
+        
+        const res = await placeOrder({
+                                      user,
+                                      items,
+                                      shippingAddress: {
+                                        street: "123 Main Street",
+                                        city: "Springfield",
+                                        state: "Illinois",
+                                        zip: "62704",
+                                        country: "USA"
+                                      },
+                                      paymentMethod: "Credit Card"
+                                    });
         alert('Order Placed Successfully!');
-        console.log(res);
+        
       } catch (error) {
         console.error('Error placing the order:', error.message);
       }

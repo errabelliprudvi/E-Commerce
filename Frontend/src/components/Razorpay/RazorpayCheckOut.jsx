@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { createPaymentOrder, verifyPayment } from '../../api';
 
 const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
   
@@ -14,33 +15,22 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
     });
   };
 
-  
+   
   const handlePayment = async () => {
-
-
-    const response = await fetch('/api/create-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        amount:total, 
-      }),
-    });
-
-    if (!response.ok) {
-      alert('Failed to create order');
-      
-      return;
-    }
-
-    const order = await response.json();
-    console.log(order);
+     var order;
+     try{
+      order = await createPaymentOrder({ amount:total,});
+      console.log(order);
+     }
+     catch(error){
+       alert("Payment Intialization failed");
+       return;
+     }
+     
     
     const isScriptLoaded = await loadRazorpayScript();
     if (!isScriptLoaded) {
       alert('Failed to load Razorpay SDK. Please check your connection.');
-      
       return;
     }
 
@@ -51,35 +41,28 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
       name: 'Your Company Name',
       description: 'Test Transaction',
       order_id: order.id, 
-      handler: function (response) {
+      handler: async function (response) {
         console.log('Payment successful:', response);
-       fetch('/api/verify-payment', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            if (data.message === 'Payment verified successfully') {
-                setPaymentStatus("SUCCESS");
-              //alert('Payment verified successfully!');
-            } else {
-                setPaymentStatus("FAILD");
-              alert('Payment verification failed!');
+        try{
+         const data =  await verifyPayment({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                  });
+                      console.log(data);
+                      if (data.message === 'Payment verified successfully') {
+                          setPaymentStatus("SUCCESS");
+                        //alert('Payment verified successfully!');
+                      } else {
+                          setPaymentStatus("FAILD");
+                        alert('Payment verification failed!');
+                      }
+          }
+          catch(error){
+              console.error('Error verifying payment:', error);
+              alert('An error occurred while verifying payment');
             }
-          })
-          .catch((error) => {
-            console.error('Error verifying payment:', error);
-            alert('An error occurred while verifying payment');
-          });
-      },
+        },
       
 
 

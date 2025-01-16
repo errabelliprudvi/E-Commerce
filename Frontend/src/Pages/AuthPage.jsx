@@ -14,7 +14,7 @@ import {
   Alert,
 } from "@mui/material";
 
-
+import { userlogin, userSignUp} from "../api";
 
 
 const AuthPage = ({ setIsAuthenticated }) => {
@@ -32,29 +32,12 @@ const AuthPage = ({ setIsAuthenticated }) => {
 
   const signUp = async () => {
     try {
-      const response = await fetch("/user/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+        const res = await userSignUp({ 
           name,
           email,
-          password,
+          password, 
           phone: mobile,
-        }),
-      });
-
-      const res = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          // Email conflict
-          throw new Error("Email already exists. Please login.");
-        } else {
-          throw new Error(res.message || "Failed to register the user.");
-        }
-      }
+        });
 
       setMessage({ type: "success", text: "Registration successful! Please log in." });
       setIsLogin(true); // Switch to login mode
@@ -65,43 +48,19 @@ const AuthPage = ({ setIsAuthenticated }) => {
 
   const login = async () => {
     try {
-      const response = await fetch("/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const res = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          // Unauthorized
-          throw new Error("Invalid credentials. Please try again.");
-        } else {
-          throw new Error(res.message || "Failed to log in.");
-        }
-      }
-      
-      setMessage({ type: "success", text: "Login successful!" });
-      console.log(res);
-      setIsAuthenticated(true)
-      //setIsAuthenticated(true); // Set user as authenticated
-      console.log(res.user.id);
-      setUser(res.user.id);
-      setIsAdmin(res.user.isAdmin);
-      fetchNumberOfItemsInCart();
-      navigate('/');
-     // localStorage.setItem('isAuthenticated', true);
-      //localStorage.setItem('userId',res.user.id)
-    } catch (error) {
-      setMessage({ type: "error", text: error.message });
-    }
-  };
+        const res = await userlogin({email, password,});
+        setMessage({ type: "success", text: "Login successful!" });
+        console.log(res);
+        setIsAuthenticated(true);
+        setUser(res.user.id);
+        setIsAdmin(res.user.isAdmin);
+        fetchNumberOfItemsInCart();
+        navigate('/');
+        } 
+        catch (error) 
+        {
+        setMessage({ type: "error", text: error.message });
+        }};
 
 
 

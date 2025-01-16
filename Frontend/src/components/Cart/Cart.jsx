@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useUser } from '../../UserProvider';
 import RazorpayCheckout from '../Razorpay/RazorpayCheckOut';
-import { getProductById } from '../../api';
+import { clearUserCart, getProductById, getUserCart, placeOrder, removeFromCart } from '../../api';
 
 export default function Cart({ userId }) {
   const { user, setItemsInCart } = useUser();
@@ -35,13 +35,8 @@ export default function Cart({ userId }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/api/cart/${userId}`);
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('Your Cart is Empty...');
-        }
-      }
-      const result = await response.json();
+      
+      const result = await getUserCart(userId);
       setCartData(result.items);
       setItemsInCart(result.items.length || 0);
 
@@ -67,43 +62,30 @@ export default function Cart({ userId }) {
 
   const handleBuyNow = async (item) => {
         
-    const items =[{}]
-    item.map((ite,index)=>
-    (
-        items[index] ={"product": ite.product._id,
-                        "price":ite.product.price,
-                        "quantity":ite.quantity
+            const items =[{}]
+            item.map((ite,index)=>
+            (
+                items[index] ={"product": ite.product._id,
+                                "price":ite.product.price,
+                                "quantity":ite.quantity
 
-        }
-    )
-    );
+                                }
+            )
+            );
     try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-            
-                "user": userId,
-                "items": items,
-                "shippingAddress": {
-                  "street": "123 Main Street",
-                  "city": "Springfield",
-                  "state": "Illinois",
-                  "zip": "62704",
-                  "country": "USA"
-                },
-                "paymentMethod": "Credit Card"
-              
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to place the order');
-      }
-
-      const res = await response.json();
+      const res = await placeOrder({ 
+                                    "user": userId,
+                                    "items": items,
+                                    "shippingAddress": {
+                                    "street": "123 Main Street",
+                                    "city": "Springfield",
+                                    "state": "Illinois",
+                                    "zip": "62704",
+                                    "country": "USA"
+                                    },
+                                    "paymentMethod": "Credit Card"
+                                          
+                                    });
       console.log(res); // Update local cart state with the response
       alert(res.message)
       clearCart()
@@ -114,20 +96,7 @@ export default function Cart({ userId }) {
 
   const clearCart = async () => {
     try {
-      const response = await fetch(`/api/cart/${userId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          // If your API requires an auth token:
-          // 'Authorization': `Bearer ${token}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to clear the cart');
-      }
-  
-      const data = await response.json();
+      const data = await clearUserCart(userId);
       setCartData([])
       setItemsInCart(0)
       console.log('cart  cleared successfully:', data);
@@ -140,19 +109,7 @@ export default function Cart({ userId }) {
 
   const handleRemoveFromCart = async (itemId) => {
     try {
-      const response = await fetch('api/cart/item', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId, product: itemId }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to remove item from cart');
-      }
-
+       const res = removeFromCart({ userId, product: itemId });
       setCartData(prevData => prevData.filter(item => item.product._id !== itemId));
       setItemsInCart(prev => prev - 1); // Update cart count
     } catch (error) {

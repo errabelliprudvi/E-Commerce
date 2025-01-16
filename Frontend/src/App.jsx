@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Shop from './Pages/ShopPage.jsx';
 import ProductPage from './Pages/ProductPage.jsx';
@@ -14,8 +14,7 @@ import AdminPage from './Pages/AdminPage.jsx';
 import { useUser } from './UserProvider.jsx';
 
 function App() {
-  //const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userId, setUserId] = useState();
+  
   const{user,isAdmin,isAuthenticated,setIsAuthenticated} = useUser();
 
   const ProtectedRoute = ({ isAuthenticated, children }) => {
@@ -25,14 +24,7 @@ function App() {
     return isAuthenticated ? isAdmin ? children : alert("UnAuthorized Access"):<Navigate to="/login" />;
   };
 
-  // Persist authentication state (optional)
-  /*useEffect(() => {
-    const authStatus = localStorage.getItem('isAuthenticated');
-    if (authStatus) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-*/
+  
   return (
     <BrowserRouter>
       <Header userId={user} />
