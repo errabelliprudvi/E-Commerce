@@ -17,9 +17,9 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
 
    
   const handlePayment = async () => {
-     
+     var order;
      try{
-      const order = await createPaymentOrder({ amount:total, currency:'INR'});
+       order = await createPaymentOrder({ amount:total, currency:'INR'});
       console.log(order);
      }
      catch(error){
@@ -33,13 +33,13 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
       alert('Failed to load Razorpay SDK. Please check your connection.');
       return;
     }
-
+    const ra_key = import.meta.env.VITE_RAZORPAY_KEY;
     const options = {
-      key: "rzp_test_a6FSh538GCokzj", // Your Razorpay key
+      key: ra_key, // Your Razorpay key
       amount: order.amount, // Amount in paise (₹500.00)
       currency: order.currency,
-      name: 'Your Company Name',
-      description: 'Test Transaction',
+      name: 'Grospr',
+      description: 'Payment',
       order_id: order.id, 
       handler: async function (response) {
         console.log('Payment successful:', response);

@@ -4,12 +4,11 @@ const crypto = require('crypto');
 
 // Initialize router
 const router = express.Router();
-const key_id = process.env.RKEY_ID;
-const key_secret =process.env.RSECRET;
+
 // Razorpay Instance
 const razorpay = new Razorpay({
-    key_id: `${key_id}`,
-    key_secret: `${key_secret}`
+    key_id: 'rzp_test_a6FSh538GCokzj',
+    key_secret: 'OcqNgmHt5FWfROjTsExdetMP'
 });
 
 // Route to Create an Order
@@ -23,6 +22,7 @@ router.post('/createOrder', async (req, res) => {
         });
         res.status(200).json(order);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Failed to create order', error });
     }
 });

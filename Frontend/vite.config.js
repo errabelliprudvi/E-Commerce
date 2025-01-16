@@ -2,10 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vite.dev/config/
-export default defineConfig({
+ /*defineConfig({
   plugins: [react()],
-  server: {
-   /* proxy: {
+   server: {
+      proxy: {
       '/user': {
         target: 'http://localhost:3000',  // Your backend server
         changeOrigin: true,
@@ -21,6 +21,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: false, 
       },
-    },*/
+    },
   },
 });
+*/
+
+// vite.config.js
+export default {
+  plugins: [react()],
+};

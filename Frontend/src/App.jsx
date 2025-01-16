@@ -14,7 +14,7 @@ import AdminPage from './Pages/AdminPage.jsx';
 import { useUser } from './UserProvider.jsx';
 
 function App() {
-  
+
   const{user,isAdmin,isAuthenticated,setIsAuthenticated} = useUser();
 
   const ProtectedRoute = ({ isAuthenticated, children }) => {
@@ -23,8 +23,7 @@ function App() {
   const ProtectedRouteA = ({ isAuthenticated, isAdmin, children }) => {
     return isAuthenticated ? isAdmin ? children : alert("UnAuthorized Access"):<Navigate to="/login" />;
   };
- 
-  
+
   return (
     <BrowserRouter>
       <Header userId={user} />

@@ -7,13 +7,14 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/E_Commerce', // MongoDB connection URI
+    mongoUrl: process.env.MONGO_URI , // MongoDB connection URI
     collectionName: 'sessions', // Name of the sessions collection
     ttl: 14 * 24 * 60 * 60, // Session TTL (Time to live) in seconds (14 days)
   }),
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Secure cookies in production (requires HTTPS)
+    secure: process.env.NODE_ENV === 'prod', // Secure cookies in production (requires HTTPS)
+    sameSite:'None',
     maxAge: 1000 * 60 * 60, // Session expiration (1 hour)
   },
 });

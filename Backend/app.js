@@ -1,3 +1,7 @@
+
+const https = require('https');
+const fs = require('fs');
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -24,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? '*' : 'http:192.168.29.52', // Allow all origins in production
+  origin: process.env.CORS_ENV === 'prod' ? ['https://grospr.netlify.app','http://localhost:5173']: ['http://localhost:5173'], // Allow all origins in production
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true, // Allow cookies to be sent with cross-origin requests
 }));
@@ -51,24 +55,41 @@ app.use('/api/payment', isAuthenticated,paymentRoutes);
 app.use('/user',authRoutes);
 
 
-app.get('*', (req, res) => {
+app.use('*', (req, res) => {
  //res.sendFile(path.join(__dirname, 'public', 'index.html'));
  res.status(500).json({ error: "No file found" });
 });
 
 
 const port = process.env.PORT || 3000;
-// Start the server
-const start = async () => {
-    try {
-        console.log(process.env.MONGO_URI)
-      await connectDB(process.env.MONGO_URI);
-      app.listen(port, () =>
-        console.log(`Server is listening on port ${port}...`)
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const sslOptions = {
+                    key: fs.readFileSync('/etc/ssl/private/server.key'),
+                    cert: fs.readFileSync('/etc/ssl/certs/server.crt')
+                  };
+
+const devServer = async () => {
+                  try {
+                      console.log(process.env.MONGO_URI)
+                    await connectDB(process.env.MONGO_URI);
+                    app.listen(port, () =>
+                      console.log(`Server is listening on port ${port}...`)
+                    );
+                  } catch (error) {
+                    console.log(error);
+                  }
+               };
   
-  start();
+
+const prodServer = async () => {
+                  try{
+                     await connectDB(process.env.MONGO_URI);
+                     https.createServer(sslOptions,app).listen(port,() => {
+                      console.log('HTTPS serevr running on port 443');
+                     });
+                  }catch(error)
+                    {
+                      console.log(error);
+                    }
+                 };
+
+  process.env.NODE_ENV === "prod" ? prodServer : devServer();
