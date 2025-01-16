@@ -35,8 +35,8 @@ function App() {
         <Route path="/product/:id" element={<ProductPage />} />
         
         <Route path="/cart" element={<ProtectedRoute isAuthenticated={isAuthenticated}><CartPage userId={user} /></ProtectedRoute>} />
-        <Route path="/user/orders" element={<ProtectedRoute isAuthenticated={isAuthenticated}><OrdersPage userId={user} /></ProtectedRoute>} />
-        <Route path="/user/profile" element={<ProtectedRoute isAuthenticated={isAuthenticated}><ProfilePage userId={user} /></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute isAuthenticated={isAuthenticated}><OrdersPage userId={user} /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute isAuthenticated={isAuthenticated}><ProfilePage userId={user} /></ProtectedRoute>} />
         
         <Route path="/dashboard" element={<ProtectedRouteA isAuthenticated={isAuthenticated} isAdmin={isAdmin}><AdminPage /></ProtectedRouteA>} />
         <Route path="*" element={<NoPage />} />

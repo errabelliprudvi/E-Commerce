@@ -55,7 +55,7 @@ const ProfilePage = ({ userId }) => {
 
         {/* Link to Orders Page */}
         <Typography variant="h6" gutterBottom>
-          <Link component={RouterLink} to="/user/orders" underline="hover" color="primary">
+          <Link component={RouterLink} to="/orders" underline="hover" color="primary">
             View Your Orders
           </Link>
         </Typography>

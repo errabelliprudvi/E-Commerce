@@ -17,16 +17,22 @@ export default function MediaCard({ item }) {
   const cartOptions ={}
 
   const handleAddToCart = async (item) => {
-    try {
-      const response = await addToCart({ 
-        userId: user,
-        product: item._id,
-        quantity: 1})
-      
-      setItemsInCart(response.cart.items.length || 0);
-    } catch (error) {
-      console.error('Error adding to cart:', error.message);
+    if(user)
+    {
+      try {
+        const response = await addToCart({ 
+          userId: user,
+          product: item._id,
+          quantity: 1})
+        
+        setItemsInCart(response.cart.items.length || 0);
+      } catch (error) {
+        console.error('Error adding to cart:', error.message);
+      }
+    }else{
+      navigate(`/login`);
     }
+    
   };
 
   const handleViewDetails = () => {

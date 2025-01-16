@@ -154,7 +154,7 @@ export default function Header({userId}) {
                'aria-labelledby': 'basic-button',
              }}
            >
-             <MenuItem onClick={()=>navigate("/user/profile")}>Profile</MenuItem>
+             <MenuItem onClick={()=>navigate("/profile")}>Profile</MenuItem>
              <MenuItem onClick={handleLogout}>Logout</MenuItem>
            </Menu>
          </div>

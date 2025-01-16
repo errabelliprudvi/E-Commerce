@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      /*'/user': {
+      '/user': {
         target: 'http://localhost:3000',  // Your backend server
         changeOrigin: true,
         secure: false, 
@@ -20,7 +20,7 @@ export default defineConfig({
         target: 'http://localhost:3000', // Your Express backend
         changeOrigin: true,
         secure: false, 
-      },*/
+      },
     },
   },
 });

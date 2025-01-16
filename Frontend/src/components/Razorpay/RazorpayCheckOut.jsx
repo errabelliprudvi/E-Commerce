@@ -17,9 +17,9 @@ const RazorpayCheckout = ({setPaymentStatus, total, setCloseState}) => {
 
    
   const handlePayment = async () => {
-     var order;
+     
      try{
-      order = await createPaymentOrder({ amount:total,});
+      const order = await createPaymentOrder({ amount:total, currency:'INR'});
       console.log(order);
      }
      catch(error){
