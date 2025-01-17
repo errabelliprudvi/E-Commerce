@@ -61,10 +61,10 @@ app.use('*', (req, res) => {
 });
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT ;
 const sslOptions = {
-                    key: fs.readFileSync('/etc/ssl/private/server.key'),
-                    cert: fs.readFileSync('/etc/ssl/certs/server.crt')
+                   key: fs.readFileSync('/etc/ssl/private/server.key'),
+                   cert: fs.readFileSync('/etc/ssl/certs/server.crt')
                   };
 
 const devServer = async () => {
@@ -92,4 +92,4 @@ const prodServer = async () => {
                     }
                  };
 
-  process.env.NODE_ENV === "prod" ? prodServer : devServer();
+  process.env.NODE_ENV === "prod" ? prodServer() : devServer();

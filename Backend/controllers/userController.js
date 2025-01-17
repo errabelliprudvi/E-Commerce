@@ -258,16 +258,20 @@ exports.login = async (req, res) => {
     }
 
    
-    req.session.userId = user._id;
-    req.session.username =user.name;
-    req.session.email = user.email;
-    req.session.isAdmin = user.isAdmin;
+    req.session.user = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      isAdmin: user.isAdmin,
+    };
+    
     
     console.log("Session after login:", JSON.stringify(req.session, null, 2)); // View session contents
 
     res.status(200).json({
       message: "Login successful",
-      user: {
+       user:{
         id: user._id,
         name: user.name,
         email: user.email,

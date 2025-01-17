@@ -36,7 +36,7 @@ export default function Header({userId}) {
       const res = await userlogOut();
 
         signOut();
-        navigate('/');
+        navigate('/login');
     }
     catch(error)
     {

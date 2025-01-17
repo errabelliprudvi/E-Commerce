@@ -1,7 +1,7 @@
 
-const API_URL = import.meta.env.VITE_API_URL ||'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL;
 
-
+const BASE_URL_IMAGE = import.meta.env.VITE_IMAGE_URL ||'';
 //const apiUrl = import.meta.env.VITE_API_URL;
 
 
@@ -147,3 +147,10 @@ export const verifyPayment = (options) =>{
                 },
                 body: JSON.stringify(options),
               });};        
+
+
+
+
+ export const chekUserSession = () => {
+               return fetchData(`${API_URL}/user/session`)
+ }             

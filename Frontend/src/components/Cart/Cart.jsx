@@ -8,6 +8,8 @@ import { useUser } from '../../UserProvider';
 import RazorpayCheckout from '../Razorpay/RazorpayCheckOut';
 import { clearUserCart, getProductById, getUserCart, placeOrder, removeFromCart } from '../../api';
 
+const BASE_URL_IMAGE = import.meta.env.VITE_IMAGE_URL ||'';
+
 export default function Cart({ userId }) {
   const { user, setItemsInCart } = useUser();
   const [items, setCartData] = useState([]);
@@ -109,13 +111,20 @@ export default function Cart({ userId }) {
 
   const handleRemoveFromCart = async (itemId) => {
     try {
-       const res = removeFromCart({ userId, product: itemId });
-      setCartData(prevData => prevData.filter(item => item.product._id !== itemId));
-      setItemsInCart(prev => prev - 1); // Update cart count
+      // Call API to remove the item
+      const res = await removeFromCart({ userId, product: itemId });
+  
+      // Update cart data in state
+      setCartData(prevData => prevData.filter(item => String(item.product._id) !== String(itemId)));
+  
+      // Update cart count
+      setItemsInCart(prev => Math.max(prev - 1, 0)); // Ensure non-negative count
     } catch (error) {
       console.error('Error removing item:', error.message);
+      alert('Failed to remove item from cart. Please try again.');
     }
   };
+  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div><h3>{error}</h3> </div>;
@@ -143,7 +152,7 @@ export default function Cart({ userId }) {
             <div className={styles.imgCnt}>
               <img
                 className={styles.img}
-                src={`/images/${products[item.product._id]?.category || 'default'}/${item.product.name}/${item.product.images[0]}`}
+                src={`${BASE_URL_IMAGE}/images/${products[item.product._id]?.category || 'default'}/${item.product.name}/${item.product.images[0]}`}
                 alt={item.product.name}
               />
             </div>

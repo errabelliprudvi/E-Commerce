@@ -10,6 +10,8 @@ import { useUser } from '../../UserProvider';
 import { Box } from '@mui/material';
 import {addToCart} from '../../api'
 
+const BASE_URL_IMAGE = import.meta.env.VITE_IMAGE_URL ||'';
+
 export default function MediaCard({ item }) {
   const { _id, name, description, images, category } = item;
   const { user, setItemsInCart } = useUser();
@@ -46,7 +48,7 @@ export default function MediaCard({ item }) {
         <CardMedia
           component="img"
           height="250"
-          image={`/images/${category}/${name}/${images[0]}`}
+          image={`${BASE_URL_IMAGE}/images/${category}/${name}/${images[0]}`}
           alt={name}
           sx={{ objectFit: 'cover' }}
         />

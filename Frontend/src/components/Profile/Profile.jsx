@@ -3,6 +3,8 @@ import { Container, Typography, Card, Avatar, Button, Divider, Link, Box, Stack 
 import { Link as RouterLink } from "react-router-dom"; // For navigation
 import { getUserDetailsById } from "../../api";
 
+const BASE_URL_IMAGE = import.meta.env.VITE_IMAGE_URL ||'';
+
 const ProfilePage = ({ userId }) => {
  
   const [user, setUser] = useState({});
@@ -36,7 +38,7 @@ const ProfilePage = ({ userId }) => {
         <Stack direction="row" spacing={4} alignItems="center">
           <Box>
             <Avatar
-              src={`/images/profile/${user.name}.jpg`}
+              src={`${BASE_URL_IMAGE}/images/profile/${user.name}.jpg`}
               alt={user.name}
               sx={{ width: 120, height: 120 }}
             />

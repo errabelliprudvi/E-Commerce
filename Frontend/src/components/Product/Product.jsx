@@ -6,6 +6,8 @@ import { useUser } from "../../UserProvider";
 import { getProductById, addToCart, placeOrder } from '../../api';
 import RazorpayCheckout from "../Razorpay/RazorpayCheckOut";
 
+const BASE_URL_IMAGE = import.meta.env.VITE_IMAGE_URL ||'';
+
 export default function Product() {
   const { user, fetchNumberOfItemsInCart, setItemsInCart } = useUser();
   const { id } = useParams(); // Extract the product ID from the URL
@@ -117,7 +119,7 @@ export default function Product() {
         <div className={styles.imgCnt}>
           <img
             className={styles.img}
-            src={product.images && product.category ? `/images/${product.category}/${product.name}/${product.images[0]}` : '/images/default-product.png'}
+            src={product.images && product.category ? `${BASE_URL_IMAGE}/images/${product.category}/${product.name}/${product.images[0]}` : '/images/default-product.png'}
             alt={product.name || 'Product Image'}
           />
         </div>

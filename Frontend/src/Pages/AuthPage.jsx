@@ -54,7 +54,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
         setIsAuthenticated(true);
         setUser(res.user.id);
         setIsAdmin(res.user.isAdmin);
-        fetchNumberOfItemsInCart();
+        fetchNumberOfItemsInCart(res.user.id);
         navigate('/');
         } 
         catch (error) 

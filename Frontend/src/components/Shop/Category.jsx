@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import styles from './shop.module.css'
 import {getCategories,getProductsByCategory} from '../../api'
 
+const BASE_URL_IMAGE = import.meta.env.VITE_IMAGE_URL ||'';
 
 export default function Category({setProducts}){
 
@@ -58,7 +59,7 @@ export default function Category({setProducts}){
                                 <div  
                                 className={`${styles.imgCnt} ${selectedCategory === item.name ? styles.selectedCategory : ''}`}
                                 onClick={() => handleCategoryClick(item._id)} >
-                                        <img className={styles.img}src={`/images/categories/${item.image}`}/>
+                                        <img className={styles.img}src={`${BASE_URL_IMAGE}/images/categories/${item.image}`}/>
                                         
                                 </div>
                                 <div className={styles.catName}> {item.name}</div>
