@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react' 
 import styles from './shop.module.css'
-import {getCategories,getProductsByCategory} from '../../api'
+import {getCategories,getProductsByCategory,getProducts} from '../../api'
 
 const BASE_URL_IMAGE = import.meta.env.VITE_IMAGE_URL ||'';
 
@@ -17,7 +17,9 @@ export default function Category({setProducts}){
     const fetchData = async () => {
       try {
         const categories = await getCategories(); 
+        const productsData = await getProducts();
         setData(categories);
+        setProducts(productsData);
         console.log(categories)
       } catch (error) {
         setError(error.message);
@@ -41,6 +43,8 @@ export default function Category({setProducts}){
       setError(error.message);
     }
   };
+
+  
 
 
 
