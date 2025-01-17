@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { getUserCart } from "./api";
+import { getUserCart ,getProducts} from "./api";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
   const [itemsInCart, setItemsInCart] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [products, setProducts] = useState([]);
 
   const signOut = () => {
     setUser(null);
@@ -29,6 +30,17 @@ export const UserProvider = ({ children }) => {
       console.error("Error fetching cart data:", error.message);
     }
   };
+
+
+   const fetchProducts = async () => {
+        try {
+          const productsData = await getProducts();
+          setProducts(productsData);
+          } catch (error) {
+          
+        } 
+      };
+  
 
   const fetchUserSession = async () => {
     try {
@@ -51,6 +63,7 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    fetchProducts();
     fetchUserSession();
   }, []); // Correct dependency array
 
@@ -67,6 +80,7 @@ export const UserProvider = ({ children }) => {
         signOut,
         isAuthenticated,
         setIsAuthenticated,
+        products,
       }}
     >
       {children}
